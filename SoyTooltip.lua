@@ -3,6 +3,8 @@
 bug: show a tooltip, mouse over bonfire/object = wrong position
 	hooking OnUpdate is too late in the load cycle; it is UGLY
 
+GameTooltip is a widget, so useful to look for widget handlers/methods
+
 --]]
 
 local tooltip_x = -20
