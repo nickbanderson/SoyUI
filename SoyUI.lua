@@ -4,7 +4,7 @@ SlashCmdList["SOYUI_RELOAD"] = function()
   ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
 end
 
-SLASH_SOYUI = "/soyui"
+SLASH_SOYUI1 = "/soyui"
 SlashCmdList["SOYUI"] = function()
-  print("soyui: hi :)")
+  -- launch gui
 end
