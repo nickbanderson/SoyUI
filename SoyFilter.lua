@@ -45,6 +45,7 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		msg = string.gsub(msg, "add", "") -- remove the word add
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
 		msg = string.gsub(msg, "^%s", "") -- remove any spaces from the end
+		msg = string.lower(msg)
 		-- If there is not an array, we will have to create it.
 		if SoyFilterDB.filterWords then
 			table.insert(SoyFilterDB.filterWords,string.lower(msg))
