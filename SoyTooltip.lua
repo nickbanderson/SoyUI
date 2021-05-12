@@ -23,6 +23,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self)
 	local name = GameTooltipTextLeft1:GetText()
 	local guild, _, _ = GetGuildInfo("mouseover")
 	local _, class, _ = UnitClass("mouseover")
+	if class == nil then class = "PRIEST" end -- priest is white (default text color)
 	if guild == nil then
 		guild = ""
 	else
