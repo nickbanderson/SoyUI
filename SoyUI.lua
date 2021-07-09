@@ -1,7 +1,24 @@
 local myAddonName, SoyUI = ...
 SoyUI.modules = {}
 
+local function dump(o)
+  if type(o) == 'table' then
+    local s = '{ '
+    for k,v in pairs(o) do
+      if type(k) ~= 'number' then k = '"'..k..'"' end
+      s = s .. '['..k..'] = ' .. dump(v) .. ','
+    end
+    return s .. '} '
+  else
+    return tostring(o)
+  end
+end
+
 function SoyUI.print(msg)
+  if type(msg) == 'table' then
+    msg = dump(msg)
+  end
+
 	DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SoyUI:|r " .. msg)	
 end
 
@@ -45,6 +62,7 @@ function SoyUI.F:ADDON_LOADED()
   if SoyUI_DB == nil then initDatabaseWithDefaults() end
   initGUI()
   for moduleName, module in pairs(SoyUI.modules) do
+    -- SoyUI.print('initting module ' .. moduleName)
     module.init()
   end
 end
