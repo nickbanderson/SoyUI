@@ -9,5 +9,5 @@
 SoyUI.lua
 SoyTweaks.lua
 SoyLayout.lua
+SoyTooltip.lua
 #SoyFilter.lua
-#SoyTooltip.lua
