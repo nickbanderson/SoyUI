@@ -9,7 +9,6 @@ local function registerSlashReload()
 end
 
 local function setCVars()
-  SetCVar('nameplateMaxDistance', SoyUI_DB.SoyTweaks.nameplateMaxDistance)
 end
 
 local function enableArenaNumberOnNameplate()
@@ -26,32 +25,17 @@ local function enableArenaNumberOnNameplate()
   end)
 end
 
-local function ensurePlayerOnTopOfRaidFrames()
-  LoadAddOn("Blizzard_CompactRaidFrames") 
-  local CRFSort_Group = function(t1, t2) 
-		if UnitIsUnit(t1, "player") then return true
-		elseif UnitIsUnit(t2, "player") then return false
-    else return t1 < t2
-    end
-  end 
-  CompactRaidFrameContainer.flowSortFunc = CRFSort_Group
-  CompactRaidFrameContainer_SetFlowSortFunction(
-    CompactRaidFrameContainer, CRFSort_Group)
-end
-
 local function init()
   registerSlashReload()
   setCVars()
-  -- ensurePlayerOnTopOfRaidFrames()
   if SoyUI_DB.SoyTweaks.showArenaNumberOnNameplate then
-    enableArenaNumberOnNameplate()
+    -- enableArenaNumberOnNameplate()
   end
 end
 
 SoyUI.modules.SoyTweaks = {
   init = init,
   defaults = {
-    nameplateMaxDistance = 41, -- [?,41]
     showArenaNumberOnNameplate = true,
   },
 }
