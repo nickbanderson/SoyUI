@@ -1,13 +1,11 @@
-## Interface: 20501
+## Interface: 30300
 
 ## Title: SoyUI
-## Author: Vegayn
+## Author: Soylord
 ## Version: 1
 ## Notes: Module-based UI enhancer
 ## SavedVariables: SoyUI_DB
 
 SoyUI.lua
 SoyTweaks.lua
-SoyLayout.lua
-SoyTooltip.lua
-#SoyFilter.lua
+SoyFilter.lua
