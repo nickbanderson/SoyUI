@@ -9,3 +9,4 @@
 SoyUI.lua
 SoyTweaks.lua
 SoyFilter.lua
+SoyFrames.lua
