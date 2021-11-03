@@ -14,7 +14,7 @@ end
 
 local function enableArenaNumberOnNameplate()
   hooksecurefunc("CompactUnitFrame_UpdateName", function(nameplate)
-    if IsActiveBattlefieldArena() and nameplate.unit:find("nameplate") then 
+    if IsActiveBattlefieldArena() and nameplate.unit:find("nameplate", 0, true) then 
       for i=1,5 do 
         if UnitIsUnit( nameplate.unit ,"arena"..i) then 
           nameplate.name:SetText(i)

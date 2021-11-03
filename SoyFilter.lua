@@ -40,7 +40,7 @@ SlashCmdList["SOYFILTER"] = function(msg)
 	elseif msg == "reset" then
 		SoyFilterDB.filterWords = {}
 
-	elseif msg:find("add") then
+	elseif msg:find("add", 0, true) then
 		-- get words to add
 		msg = string.gsub(msg, "add", "") -- remove the word add
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
@@ -55,7 +55,7 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		  InformPlayer("Added " .. msg)
 		end 
 
-	elseif msg:find("remove") then
+	elseif msg:find("remove", 0, true) then
 		-- get words to remove
 		msg = string.gsub(msg, "remove", "") -- remove the word remove
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
@@ -71,7 +71,7 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		  InformPlayer("No custom user words found")
 		end 	
 
-  elseif msg:find("threshold") then
+  elseif msg:find("threshold", 0, true) then
 		-- get threshold
 		msg = string.gsub(msg, "threshold", "") -- remove the t
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
@@ -105,7 +105,7 @@ local function filter(frame, event, message, sender, ...)
   local matchCount = 0
 
 	for i, word in ipairs(SoyFilterDB.filterWords) do
-			if message:find(word) then
+			if message:find(word, 0, true) then
 					matchCount = matchCount + 1
 			end
 	end
