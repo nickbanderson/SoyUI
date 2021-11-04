@@ -15,40 +15,42 @@ local function createBar(name, size, color)
   return f
 end
 
-local function createPlayer()
-  local player = {}
+local function createUnitFrame(unit, x, y)
+  local f = {}
 
-  player.parent = createBar("SoyUIPlayerFrame", {144,36}, {0,0,0}) 
-  player.parent:SetPoint("CENTER", 500, -100)
+  local parent_name = "SoyUIUnitFrame_" .. unit
+  f.parent = createBar(parent_name, {144,36}, {0,0,0}) 
+  f.parent:SetPoint("CENTER", x, y)
 
-  player.health = createBar("SoyUIPlayerHealth", {140,15}, {0,200,0}) 
-  player.health:SetPoint("TOPLEFT", "SoyUIPlayerFrame", "TOPLEFT", 2, -2)
-  player.health:RegisterEvent("UNIT_HEALTH")
-  player.health:SetScript("OnEvent", 
+  f.health = createBar(parent_name .. "_hp", {140,15}, {0,200,0}) 
+  f.health:SetPoint("TOPLEFT", parent_name, "TOPLEFT", 2, -2)
+  f.health:RegisterEvent("UNIT_HEALTH")
+  f.health:SetScript("OnEvent", 
     function(self, event, ...)
-      local unit = ...
-      if unit ~= "player" then return end
-      player.health:SetWidth(140 * (UnitHealth(unit))/UnitHealthMax(unit))
+      local u = ...
+      if u ~= unit then return end
+      f.health:SetWidth(140 * (UnitHealth(unit))/UnitHealthMax(unit))
     end
   )
 
-  player.power = createBar("SoyUIPlayerPower", {140,15}, {0,0,200}) 
-  player.power:SetPoint("BOTTOMLEFT", "SoyUIPlayerFrame", "BOTTOMLEFT", 2, 2)
-  player.power:RegisterEvent("UNIT_MANA")
-  player.power:SetScript("OnEvent", 
+  f.power = createBar(parent_name .. "_power", {140,15}, {0,0,200}) 
+  f.power:SetPoint("BOTTOMLEFT", parent_name, "BOTTOMLEFT", 2, 2)
+  f.power:RegisterEvent("UNIT_MANA")
+  f.power:SetScript("OnEvent", 
     function(self, event, ...)
-      local unit, type = ...
-      if unit ~= "player" then return end
-      player.power:SetWidth(141 * (UnitPower(unit))/UnitPowerMax(unit))
+      local u, type = ...
+      if u ~= unit then return end
+      f.power:SetWidth(140 * (UnitPower(unit))/UnitPowerMax(unit))
     end
   )
 
-
-  return player
+  return f
 end
 
 local function init()
-  SoyUI.modules.SoyFrames.frames.player = createPlayer()
+  SoyUI.modules.SoyFrames.frames.player = createUnitFrame("player", 300, 0)
+  SoyUI.modules.SoyFrames.frames.target = createUnitFrame("target", 600, 0)
+  SoyUI.modules.SoyFrames.frames.focus = createUnitFrame("focus", 300, -100)
 end
 
 SoyUI.modules.SoyFrames = {
