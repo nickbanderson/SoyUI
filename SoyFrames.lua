@@ -47,10 +47,46 @@ local function createUnitFrame(unit, x, y)
   return f
 end
 
+local function hideUnitFrame(f)
+  for i, frame in pairs(f) do
+    frame:Hide()
+  end
+end
+
+local function showUnitFrame(f)
+  for i, frame in pairs(f) do
+    frame:Show()
+  end
+end
+
 local function init()
   SoyUI.modules.SoyFrames.frames.player = createUnitFrame("player", 300, 0)
+
   SoyUI.modules.SoyFrames.frames.target = createUnitFrame("target", 600, 0)
+  hideUnitFrame(SoyUI.modules.SoyFrames.frames.target)
+  SoyUI.modules.SoyFrames.frames.target.parent:RegisterEvent("PLAYER_TARGET_CHANGED")
+  SoyUI.modules.SoyFrames.frames.target.parent:SetScript("OnEvent",
+    function(self, event, ...)
+      if UnitExists("target") then
+        showUnitFrame(SoyUI.modules.SoyFrames.frames.target)
+      else
+        hideUnitFrame(SoyUI.modules.SoyFrames.frames.target)
+      end
+    end
+  )
+
   SoyUI.modules.SoyFrames.frames.focus = createUnitFrame("focus", 300, -100)
+  hideUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
+  SoyUI.modules.SoyFrames.frames.focus.parent:RegisterEvent("PLAYER_FOCUS_CHANGED")
+  SoyUI.modules.SoyFrames.frames.focus.parent:SetScript("OnEvent",
+    function(self, event, ...)
+      if UnitExists("focus") then
+        showUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
+      else
+        hideUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
+      end
+    end
+  )
 end
 
 SoyUI.modules.SoyFrames = {
