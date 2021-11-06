@@ -1,5 +1,12 @@
 local _, SoyUI = ...
 
+local function updateHealth(f, unit)
+  f:SetWidth(140 * (UnitHealth(unit) / UnitHealthMax(unit)))
+end
+
+local function updatePower(f, unit)
+  f:SetWidth(140 * (UnitPower(unit) / UnitPowerMax(unit)))
+end
 
 local function createBar(name, size, color)
   local f = CreateFrame("Frame", name, UIParent)
@@ -28,8 +35,7 @@ local function createUnitFrame(unit, x, y)
   f.health:SetScript("OnEvent", 
     function(self, event, ...)
       local u = ...
-      if u ~= unit then return end
-      f.health:SetWidth(140 * (UnitHealth(unit))/UnitHealthMax(unit))
+      if u == unit then updateHealth(f.health, unit) end
     end
   )
 
@@ -39,8 +45,7 @@ local function createUnitFrame(unit, x, y)
   f.power:SetScript("OnEvent", 
     function(self, event, ...)
       local u, type = ...
-      if u ~= unit then return end
-      f.power:SetWidth(140 * (UnitPower(unit))/UnitPowerMax(unit))
+      if u == unit then updatePower(f.power, unit) end
     end
   )
 
@@ -69,6 +74,8 @@ local function init()
     function(self, event, ...)
       if UnitExists("target") then
         showUnitFrame(SoyUI.modules.SoyFrames.frames.target)
+        updateHealth(SoyUI.modules.SoyFrames.frames.target.health, "target")
+        updatePower(SoyUI.modules.SoyFrames.frames.target.power, "target")
       else
         hideUnitFrame(SoyUI.modules.SoyFrames.frames.target)
       end
@@ -82,6 +89,8 @@ local function init()
     function(self, event, ...)
       if UnitExists("focus") then
         showUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
+        updateHealth(SoyUI.modules.SoyFrames.frames.focus.health, "focus")
+        updatePower(SoyUI.modules.SoyFrames.frames.focus.power, "focus")
       else
         hideUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
       end
