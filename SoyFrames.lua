@@ -1,13 +1,5 @@
 local _, SoyUI = ...
 
-local function updateHealth(f, unit)
-  f:SetWidth(140 * (UnitHealth(unit) / UnitHealthMax(unit)))
-end
-
-local function updatePower(f, unit)
-  f:SetWidth(140 * (UnitPower(unit) / UnitPowerMax(unit)))
-end
-
 local function createBar(name, size, color)
   local f = CreateFrame("Frame", name, UIParent)
   f:SetFrameStrata("LOW")
@@ -18,89 +10,145 @@ local function createBar(name, size, color)
   t:SetTexture(color[1], color[2], color[3]) -- color = {r, g, b}
   t:SetAllPoints(f)
   f.texture = t
-
+ 
   return f
 end
 
-local function createUnitFrame(unit, x, y)
-  local f = {}
+-- meta class
+local UnitFrame = {
+  unit = nil,
+  hp = nil,
+  power = nil,
+  barWidth = 140,
+  barHeight = 15,
+  padding = 2,
+  frames = {},
+}
+UnitFrame.__index = UnitFrame
 
-  local parent_name = "SoyUIUnitFrame_" .. unit
-  f.parent = createBar(parent_name, {144,36}, {0,0,0}) 
-  f.parent:SetPoint("CENTER", x, y)
-
-  f.health = createBar(parent_name .. "_hp", {140,15}, {0,200,0}) 
-  f.health:SetPoint("TOPLEFT", parent_name, "TOPLEFT", 2, -2)
-  f.health:RegisterEvent("UNIT_HEALTH")
-  f.health:SetScript("OnEvent", 
-    function(self, event, ...)
+function UnitFrame:SetUpdateScripts()
+  self.frames.hp:RegisterEvent("UNIT_HEALTH")
+  self.frames.hp:SetScript("OnEvent",
+    function(f, event, ...)
       local u = ...
-      if u == unit then updateHealth(f.health, unit) end
+      if u == self.unit then self:updateHp() end
     end
   )
 
-  f.power = createBar(parent_name .. "_power", {140,15}, {0,0,200}) 
-  f.power:SetPoint("BOTTOMLEFT", parent_name, "BOTTOMLEFT", 2, 2)
-  f.power:RegisterEvent("UNIT_MANA")
-  f.power:SetScript("OnEvent", 
-    function(self, event, ...)
-      local u, type = ...
-      if u == unit then updatePower(f.power, unit) end
+  self.frames.power:RegisterEvent("UNIT_MANA")
+  self.frames.power:SetScript("OnEvent",
+    function(f, event, ...)
+      local u = ...
+      if u == self.unit then self:updatePower() end
     end
   )
-
-  return f
 end
 
-local function hideUnitFrame(f)
-  for i, frame in pairs(f) do
-    frame:Hide()
+function UnitFrame:new(unit, x, y)
+  local uf = {}
+  setmetatable(uf, UnitFrame)
+
+  uf.name = "SoyFrames_" .. unit
+  uf.unit = unit
+
+  -- uf.frames.background = createBar(
+  local background = createBar(
+    uf.name .. "_background", 
+    {uf.barWidth + 2 * uf.padding, 2 * uf.barHeight + 3 * uf.padding},
+    {0, 0, 0}
+  )
+  -- uf.frames.background:SetPoint("CENTER", x, y)
+  background:SetPoint("CENTER", x, y)
+
+  -- uf.frames.hp = createBar(
+  local hp = createBar(
+    uf.name .. "_hp",
+    {uf.barWidth, uf.barHeight},
+    {0, 120, 0}
+  )
+  hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
+                        uf.padding, -1 * uf.padding)
+
+  -- uf.frames.power = createBar(
+  local power = createBar(
+    uf.name .. "_power",
+    {uf.barWidth, uf.barHeight},
+    {0, 0, 120}
+  )
+  power:SetPoint("BOTTOMLEFT", uf.name .. "_background",
+                           "BOTTOMLEFT", uf.padding, uf.padding)
+
+  uf.frames = {
+    background = background,
+    hp = hp,
+    power = power,
+  }
+  uf:SetUpdateScripts()
+  return uf
+end
+
+function UnitFrame:updateHp()
+  self.frames.hp:SetWidth(self.barWidth * 
+                          (UnitHealth(self.unit) / UnitHealthMax(self.unit)))
+end
+
+function UnitFrame:updatePower()
+  self.frames.power:SetWidth(self.barWidth * 
+                             (UnitPower(self.unit) / UnitPowerMax(self.unit)))
+end
+
+function UnitFrame:show()
+  self:updateHp()
+  self:updatePower()
+  for i, f in pairs(self.frames) do
+    f:Show()
   end
 end
 
-local function showUnitFrame(f)
-  for i, frame in pairs(f) do
-    frame:Show()
+function UnitFrame:hide()
+  for i, f in pairs(self.frames) do
+    f:Hide()
   end
 end
 
 local function init()
-  SoyUI.modules.SoyFrames.frames.player = createUnitFrame("player", 300, 0)
+  SoyUI.modules.SoyFrames.uf.player = UnitFrame:new("player", 300, 0)
+  SoyUI.modules.SoyFrames.uf.player:show()
 
-  SoyUI.modules.SoyFrames.frames.target = createUnitFrame("target", 600, 0)
-  hideUnitFrame(SoyUI.modules.SoyFrames.frames.target)
-  SoyUI.modules.SoyFrames.frames.target.parent:RegisterEvent("PLAYER_TARGET_CHANGED")
-  SoyUI.modules.SoyFrames.frames.target.parent:SetScript("OnEvent",
-    function(self, event, ...)
-      if UnitExists("target") then
-        showUnitFrame(SoyUI.modules.SoyFrames.frames.target)
-        updateHealth(SoyUI.modules.SoyFrames.frames.target.health, "target")
-        updatePower(SoyUI.modules.SoyFrames.frames.target.power, "target")
-      else
-        hideUnitFrame(SoyUI.modules.SoyFrames.frames.target)
-      end
-    end
-  )
+  SoyUI.modules.SoyFrames.uf.focus = UnitFrame:new("focus", 300, -100)
+  SoyUI.modules.SoyFrames.uf.focus:hide()
 
-  SoyUI.modules.SoyFrames.frames.focus = createUnitFrame("focus", 300, -100)
-  hideUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
-  SoyUI.modules.SoyFrames.frames.focus.parent:RegisterEvent("PLAYER_FOCUS_CHANGED")
-  SoyUI.modules.SoyFrames.frames.focus.parent:SetScript("OnEvent",
-    function(self, event, ...)
-      if UnitExists("focus") then
-        showUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
-        updateHealth(SoyUI.modules.SoyFrames.frames.focus.health, "focus")
-        updatePower(SoyUI.modules.SoyFrames.frames.focus.power, "focus")
-      else
-        hideUnitFrame(SoyUI.modules.SoyFrames.frames.focus)
-      end
-    end
-  )
+  SoyUI.modules.SoyFrames.uf.target = UnitFrame:new("target", 600, 0)
+  SoyUI.modules.SoyFrames.uf.target:hide()
+
+  local ef = CreateFrame("Frame", "SoyFrames_ef", UIParent)
+  ef:RegisterEvent("PLAYER_TARGET_CHANGED")
+  ef:RegisterEvent("PLAYER_FOCUS_CHANGED")
+  ef:SetScript("OnEvent", function(s, event, ...)
+    (({
+      PLAYER_TARGET_CHANGED = function() 
+        print("changed target (ef)")
+        if UnitExists("target") then 
+          SoyUI.modules.SoyFrames.uf.target:show() 
+        else
+          SoyUI.modules.SoyFrames.uf.target:hide() 
+        end
+      end,
+      PLAYER_FOCUS_CHANGED = function() 
+        print("changed focus (ef)")
+        if UnitExists("focus") then 
+          SoyUI.modules.SoyFrames.uf.focus:show() 
+        else
+          SoyUI.modules.SoyFrames.uf.focus:hide() 
+        end
+      end,
+    })[event] or print("UNMATCHED EVENT"))()
+  end)
 end
 
 SoyUI.modules.SoyFrames = {
   init = init,
   defaults = {
   },
-  frames = {},
+  uf = {},
 }
