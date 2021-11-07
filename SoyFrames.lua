@@ -127,7 +127,6 @@ local function init()
   ef:SetScript("OnEvent", function(s, event, ...)
     (({
       PLAYER_TARGET_CHANGED = function() 
-        print("changed target (ef)")
         if UnitExists("target") then 
           SoyUI.modules.SoyFrames.uf.target:show() 
         else
@@ -135,7 +134,6 @@ local function init()
         end
       end,
       PLAYER_FOCUS_CHANGED = function() 
-        print("changed focus (ef)")
         if UnitExists("focus") then 
           SoyUI.modules.SoyFrames.uf.focus:show() 
         else
