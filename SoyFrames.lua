@@ -1,4 +1,10 @@
 local _, SoyUI = ...
+SoyUI.modules.SoyFrames = {
+  init = nil,
+  defaults = {
+  },
+  uf = {},
+}
 
 local function createBar(name, size, color)
   local f = CreateFrame("Frame", name, UIParent)
@@ -51,16 +57,13 @@ function UnitFrame:new(unit, x, y)
   uf.name = "SoyFrames_" .. unit
   uf.unit = unit
 
-  -- uf.frames.background = createBar(
   local background = createBar(
     uf.name .. "_background", 
     {uf.barWidth + 2 * uf.padding, 2 * uf.barHeight + 3 * uf.padding},
     {0, 0, 0}
   )
-  -- uf.frames.background:SetPoint("CENTER", x, y)
   background:SetPoint("CENTER", x, y)
 
-  -- uf.frames.hp = createBar(
   local hp = createBar(
     uf.name .. "_hp",
     {uf.barWidth, uf.barHeight},
@@ -69,7 +72,6 @@ function UnitFrame:new(unit, x, y)
   hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
                         uf.padding, -1 * uf.padding)
 
-  -- uf.frames.power = createBar(
   local power = createBar(
     uf.name .. "_power",
     {uf.barWidth, uf.barHeight},
@@ -111,7 +113,7 @@ function UnitFrame:hide()
   end
 end
 
-local function init()
+function SoyUI.modules.SoyFrames.init()
   SoyUI.modules.SoyFrames.uf.player = UnitFrame:new("player", 300, 0)
   SoyUI.modules.SoyFrames.uf.player:show()
 
@@ -144,9 +146,3 @@ local function init()
   end)
 end
 
-SoyUI.modules.SoyFrames = {
-  init = init,
-  defaults = {
-  },
-  uf = {},
-}
