@@ -100,6 +100,13 @@ SlashCmdList["SOYFILTER"] = function(msg)
 end
 
 local function filter(frame, event, message, sender, ...)
+	-- filter from horde (not working :( )
+	-- englishFaction, _ = UnitFactionGroup(sender)
+	-- if englishFaction ~= nil then
+	-- 	InformPlayer(englishFaction)
+	-- end
+
+	-- check matched keywords
 	if SoyFilterDB.filterWords == {} then return false end
   message = string.lower(message)
   local matchCount = 0
