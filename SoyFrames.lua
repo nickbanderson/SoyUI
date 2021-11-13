@@ -123,8 +123,21 @@ end
 
 function UnitFrame:updateMeta()
   self.frames.background.text:SetText(GetUnitName(self.unit))
+  local t = UnitPowerType(self.unit)
+  local color = {
+    [0] = {0, 0, 255},    -- mana
+    [1] = {255, 0, 0},    -- rage
+    [2] = {255, 128, 64}, -- focus
+    [3] = {255, 255, 0},  -- energy
+    [6] = {0, 209, 255},  -- runic power
+  }
+  if color[t] == nil then
+    print(self.unit .. " " .. t)
+    error("unit power type doesn't have color defined in addon")
+  end
   self.frames.power.texture:SetTexture(color[t][1], color[t][2], color[t][3])
 end
+
 function UnitFrame:show()
   self:updateMeta()
   self:updateHp()
