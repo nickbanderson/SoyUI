@@ -142,6 +142,7 @@ end
 
 function SoyUI.modules.SoyFrames.init()
   SoyUI.modules.SoyFrames.uf.player = UnitFrame:new("player", 300, 0)
+  SoyUI.modules.SoyFrames.uf.player:hide()
   SoyUI.modules.SoyFrames.uf.player:show()
 
   SoyUI.modules.SoyFrames.uf.focus = UnitFrame:new("focus", 300, -100)
