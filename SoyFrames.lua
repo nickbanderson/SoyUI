@@ -5,6 +5,7 @@ SoyUI.modules.SoyFrames = {
   },
   uf = {},
 }
+local m = SoyUI.modules.SoyFrames
 
 local function createBar(name, size, color)
   local f = CreateFrame("Frame", name, UIParent)
@@ -153,16 +154,16 @@ function UnitFrame:hide()
   end
 end
 
-function SoyUI.modules.SoyFrames.init()
-  SoyUI.modules.SoyFrames.uf.player = UnitFrame:new("player", 300, 0)
-  SoyUI.modules.SoyFrames.uf.player:hide()
-  SoyUI.modules.SoyFrames.uf.player:show()
+function m.init()
+  m.uf.player = UnitFrame:new("player", 300, 0)
+  m.uf.player:hide()
+  m.uf.player:show()
 
-  SoyUI.modules.SoyFrames.uf.focus = UnitFrame:new("focus", 300, -100)
-  SoyUI.modules.SoyFrames.uf.focus:hide()
+  m.uf.focus = UnitFrame:new("focus", 300, -100)
+  m.uf.focus:hide()
 
-  SoyUI.modules.SoyFrames.uf.target = UnitFrame:new("target", 600, 0)
-  SoyUI.modules.SoyFrames.uf.target:hide()
+  m.uf.target = UnitFrame:new("target", 600, 0)
+  m.uf.target:hide()
 
   local ef = CreateFrame("Frame", "SoyFrames_ef", UIParent)
   ef:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -171,16 +172,16 @@ function SoyUI.modules.SoyFrames.init()
     (({
       PLAYER_TARGET_CHANGED = function() 
         if UnitExists("target") then 
-          SoyUI.modules.SoyFrames.uf.target:show() 
+          m.uf.target:show() 
         else
-          SoyUI.modules.SoyFrames.uf.target:hide() 
+          m.uf.target:hide() 
         end
       end,
       PLAYER_FOCUS_CHANGED = function() 
         if UnitExists("focus") then 
-          SoyUI.modules.SoyFrames.uf.focus:show() 
+          m.uf.focus:show() 
         else
-          SoyUI.modules.SoyFrames.uf.focus:hide() 
+          m.uf.focus:hide() 
         end
       end,
     })[event] or print("UNMATCHED EVENT"))()

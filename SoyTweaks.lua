@@ -1,4 +1,11 @@
 local _, SoyUI = ...
+SoyUI.modules.SoyTweaks = {
+  init = nil,
+  defaults = {
+    showArenaNumberOnNameplate = true,
+  },
+}
+local m = SoyUI.modules.SoyTweaks
 
 local function registerSlashReload()
   SLASH_SOYUI_RELOAD1 = "/rl"
@@ -25,17 +32,10 @@ local function enableArenaNumberOnNameplate()
   end)
 end
 
-local function init()
+function m.init()
   registerSlashReload()
   setCVars()
   if SoyUI_DB.SoyTweaks.showArenaNumberOnNameplate then
     -- enableArenaNumberOnNameplate()
   end
 end
-
-SoyUI.modules.SoyTweaks = {
-  init = init,
-  defaults = {
-    showArenaNumberOnNameplate = true,
-  },
-}

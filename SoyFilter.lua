@@ -7,6 +7,7 @@ SoyUI.modules.SoyFilter = {
 	},
 	ef = nil,
 }
+local m = SoyUI.modules.SoyFilter
 
 SLASH_SOYFILTER1 = "/sf"
 SlashCmdList["SOYFILTER"] = function(msg)
@@ -125,7 +126,7 @@ local function filter(frame, event, message, sender, ...)
 end
 
 -- add filters
-function SoyUI.modules.SoyFilter.init()
+function m.init()
 	local ef = CreateFrame("Frame")
 
 	local tbl = {
