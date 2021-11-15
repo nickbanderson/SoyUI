@@ -1,11 +1,12 @@
-SoyFilterDB_DEFAULTS = {
-	matchThreshold = 2,
-	filterWords = {}
+local _, SoyUI = ...
+SoyUI.modules.SoyFilter = {
+	init = nil,
+	defaults = {
+		matchThreshold = 1,
+		filterWords = {},
+	},
+	ef = nil,
 }
-
-local function InformPlayer(msg) 
-	DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SoyFilter:|r " .. msg)	
-end
 
 SLASH_SOYFILTER1 = "/sf"
 SlashCmdList["SOYFILTER"] = function(msg)
@@ -13,32 +14,32 @@ SlashCmdList["SOYFILTER"] = function(msg)
 	if msg == "toggle" then
 		filterSPAM = not filterSPAM
 		if (filterSPAM == false) then
-			InformPlayer("Spam filter enabled")
+			SoyUI.print("Spam filter enabled")
 		else
-			InformPlayer("Spam filter disabled until reload")
+			SoyUI.print("Spam filter disabled until reload")
 		end
 
 	elseif msg == "verbose" then
 		verbose = not verbose
 		if (verbose == true) then
-		  InformPlayer("Verbose filtering enabled until reload")
+		  SoyUI.print("Verbose filtering enabled until reload")
 		else
-		  InformPlayer("Verbose filtering disabled")
+		  SoyUI.print("Verbose filtering disabled")
 		end
 
 	elseif msg == "words" then
 		-- build a string using the words array
 		result = ""
-		for i = 1, #SoyFilterDB.filterWords do
+		for i = 1, #SoyUI_DB.SoyFilter.filterWords do
 			if (result.length ~= 0) then
 				result = result .. ", "
 			end
-			result = result .. SoyFilterDB.filterWords[i]
+			result = result .. SoyUI_DB.SoyFilter.filterWords[i]
 		end
-		InformPlayer(result)
+		SoyUI.print(result)
 
 	elseif msg == "reset" then
-		SoyFilterDB.filterWords = {}
+		SoyUI_DB.SoyFilter.filterWords = {}
 
 	elseif msg:find("add", 0, true) then
 		-- get words to add
@@ -47,12 +48,12 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		msg = string.gsub(msg, "^%s", "") -- remove any spaces from the start
 		msg = string.lower(msg)
 		-- If there is not an array, we will have to create it.
-		if SoyFilterDB.filterWords then
-			table.insert(SoyFilterDB.filterWords,string.lower(msg))
-		  InformPlayer("Added " .. msg)
+		if SoyUI_DB.SoyFilter.filterWords then
+			table.insert(SoyUI_DB.SoyFilter.filterWords,string.lower(msg))
+		  SoyUI.print("Added " .. msg)
 		else
-			SoyFilterDB.filterWords = {msg}
-		  InformPlayer("Added " .. msg)
+			SoyUI_DB.SoyFilter.filterWords = {msg}
+		  SoyUI.print("Added " .. msg)
 		end 
 
 	elseif msg:find("remove", 0, true) then
@@ -60,15 +61,15 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		msg = string.gsub(msg, "remove", "") -- remove the word remove
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
 		msg = string.gsub(msg, "^%s", "") -- remove any spaces from the end
-		if SoyFilterDB.filterWords then
-			for i = 1, #SoyFilterDB.filterWords do
-				if (SoyFilterDB.filterWords[i] == msg) then
-					table.remove(SoyFilterDB.filterWords,i)
+		if SoyUI_DB.SoyFilter.filterWords then
+			for i = 1, #SoyUI_DB.SoyFilter.filterWords do
+				if (SoyUI_DB.SoyFilter.filterWords[i] == msg) then
+					table.remove(SoyUI_DB.SoyFilter.filterWords,i)
 				end
 			end
-		  InformPlayer("Removed " .. msg)
+		  SoyUI.print("Removed " .. msg)
 		else
-		  InformPlayer("No custom user words found")
+		  SoyUI.print("No custom user words found")
 		end 	
 
   elseif msg:find("threshold", 0, true) then
@@ -77,24 +78,24 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
 		msg = string.gsub(msg, "^%s", "") -- remove any spaces from the end
 		if msg == "" then 
-			InformPlayer("Current threshold is " .. SoyFilterDB.matchThreshold)
+			SoyUI.print("Current threshold is " .. SoyUI_DB.SoyFilter.matchThreshold)
 	  elseif tonumber(msg) > 0 and tonumber(msg) < 100 then
-			SoyFilterDB.matchThreshold = tonumber(msg)
-			InformPlayer("New threshold of " .. SoyFilterDB.matchThreshold)
+			SoyUI_DB.SoyFilter.matchThreshold = tonumber(msg)
+			SoyUI.print("New threshold of " .. SoyUI_DB.SoyFilter.matchThreshold)
 		else
-			InformPlayer("Bad argument.")
+			SoyUI.print("Bad argument.")
 		end
 
 	else
-		InformPlayer("List of commands")
-		InformPlayer("/sf toggle")
-		InformPlayer("/sf words     lists spam words")
-		InformPlayer("/sf add WORD     add one word")
-		InformPlayer("/sf remove WORD     remove one word")
-		InformPlayer("/sf verbose     show filtered msgs")
-		InformPlayer("/sf reset     remove all saved words.")
-		InformPlayer("/sf threshold     view match threshold for filter")
-		InformPlayer("/sf threshold NUMBER     change match threshold")
+		SoyUI.print("List of commands")
+		SoyUI.print("/sf toggle")
+		SoyUI.print("/sf words     lists spam words")
+		SoyUI.print("/sf add WORD     add one word")
+		SoyUI.print("/sf remove WORD     remove one word")
+		SoyUI.print("/sf verbose     show filtered msgs")
+		SoyUI.print("/sf reset     remove all saved words.")
+		SoyUI.print("/sf threshold     view match threshold for filter")
+		SoyUI.print("/sf threshold NUMBER     change match threshold")
 
 	end
 end
@@ -103,58 +104,47 @@ local function filter(frame, event, message, sender, ...)
 	-- filter from horde (not working :( )
 	-- englishFaction, _ = UnitFactionGroup(sender)
 	-- if englishFaction ~= nil then
-	-- 	InformPlayer(englishFaction)
+	-- 	SoyUI.print(englishFaction)
 	-- end
 
 	-- check matched keywords
-	if SoyFilterDB.filterWords == {} then return false end
+	if SoyUI_DB.SoyFilter.filterWords == {} then return false end
   message = string.lower(message)
   local matchCount = 0
 
-	for i, word in ipairs(SoyFilterDB.filterWords) do
+	for i, word in ipairs(SoyUI_DB.SoyFilter.filterWords) do
 			if message:find(word, 0, true) then
 					matchCount = matchCount + 1
 			end
 	end
 
-	if matchCount >= SoyFilterDB.matchThreshold then
-		if verbose then InformPlayer("Filtered: " .. message) end
+	if matchCount >= SoyUI_DB.SoyFilter.matchThreshold then
+		if verbose then SoyUI.print("Filtered: " .. message) end
 		return true -- hide this message
   end
 end
 
-
-local f = CreateFrame("Frame")
-
--- load DB
-f:RegisterEvent("ADDON_LOADED")
-function f:OnEvent(event, addonName)
-	if event == "ADDON_LOADED" and addonName == "SoyUI" then
-		if SoyFilterDB == nil then SoyFilterDB = SoyFilterDB_DEFAULTS end
-	end
-end
-f:SetScript("OnEvent", f.OnEvent)
-
 -- add filters
-local tbl = {
-	"CHAT_MSG_CHANNEL",
-	"CHAT_MSG_YELL",
-	"CHAT_MSG_SAY",
-	"CHAT_MSG_EMOTE",
-	"CHAT_MSG_DND",
-	"CHAT_MSG_AFK",
-}
-for i = 1, #tbl do
-	local event = tbl[i]
-	local frames = {GetFramesRegisteredForEvent(event)}
-	for i = 1, #frames do
-		local frame = frames[i]
-		frame:UnregisterEvent(event)
-	end
-	f:RegisterEvent(event)
-	ChatFrame_AddMessageEventFilter(event, filter)
-	for i = 1, #frames do
-		local frame = frames[i]
-		frame:RegisterEvent(event)
+function SoyUI.modules.SoyFilter.init()
+	local ef = CreateFrame("Frame")
+
+	local tbl = {
+		"CHAT_MSG_CHANNEL",
+		"CHAT_MSG_YELL",
+		"CHAT_MSG_SAY",
+	}
+	for i = 1, #tbl do
+		local event = tbl[i]
+		local frames = {GetFramesRegisteredForEvent(event)}
+		for i = 1, #frames do
+			local frame = frames[i]
+			frame:UnregisterEvent(event)
+		end
+		ef:RegisterEvent(event)
+		ChatFrame_AddMessageEventFilter(event, filter)
+		for i = 1, #frames do
+			local frame = frames[i]
+			frame:RegisterEvent(event)
+		end
 	end
 end
