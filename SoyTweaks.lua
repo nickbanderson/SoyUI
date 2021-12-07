@@ -20,12 +20,14 @@ local pvp_timers = {
   thirty = {
     "Thirty seconds until the Arena battle begins!",
     "The battle for Warsong Gulch begins in 30 seconds. Prepare yourselves!",
+    "The battle for Arathi Basin begins in 30 seconds. Prepare yourselves!",
     "The battle for Strand of the Ancients begins in 30 seconds. Prepare yourselves!",
     "Round 2 begins in 30 seconds. Prepare yourselves!",
   },
   sixty = {
     "One minute until the Arena battle begins!",
     "The battle for Warsong Gulch begins in 1 minute.",
+    "The battle for Arathi Basin begins in 1 minute.",
     "The battle for Strand of the Ancients begins in 1 minute.",
     "Round 2 of the Battle for the Strand of the Ancients begins in 1 minute.",
   },
