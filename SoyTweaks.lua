@@ -14,25 +14,21 @@ SoyUI.modules.SoyTweaks = {
 local m = SoyUI.modules.SoyTweaks
 
 local pvp_timers = {
-  fifteen = {
-    "Fifteen seconds until the Arena battle begins!",
+  [3] = {
+    "Duel starting: 3",
   },
-  thirty = {
-    "Thirty seconds until the Arena battle begins!",
-    "The battle for Warsong Gulch begins in 30 seconds. Prepare yourselves!",
-    "The battle for Arathi Basin begins in 30 seconds. Prepare yourselves!",
-    "The battle for Strand of the Ancients begins in 30 seconds. Prepare yourselves!",
-    "The Battle for Eye of the Storm begins in 30 seconds.",
-    "Round 2 begins in 30 seconds. Prepare yourselves!",
-    "The battle will begin in 30 seconds!",
+  [15] = {
+    "Fifteen seconds until",
   },
-  sixty = {
-    "One minute until the Arena battle begins!",
-    "The battle for Warsong Gulch begins in 1 minute.",
-    "The Battle for Eye of the Storm begins in 1 minute.",
-    "The battle for Strand of the Ancients begins in 1 minute.",
-    "Round 2 of the Battle for the Strand of the Ancients begins in 1 minute.",
-    "The battle will begin in 1 minute.",
+  [30] = {
+    "Thirty seconds until",
+    "begins in 30 seconds",
+    "begin in 30 seconds",
+  },
+  [60] = {
+    "One minute until",
+    "begins in 1 minute.",
+    "begin in 1 minute.",
   },
 }
 
@@ -64,27 +60,18 @@ end
 local function enablePvpCountdowns()
   m.cd.ef = CreateFrame("Frame")
   function m.cd.ef:OnEvent(event, ...)
-    self[event](self, ...)
+    local msg = ...
+    for timer, strings in pairs(pvp_timers) do
+      for i, string in ipairs(strings) do
+        if msg:find(string, 0, true) then
+          m.cd.timer = timer
+        end
+      end
+    end
   end
   m.cd.ef:SetScript("OnEvent", m.cd.ef.OnEvent)
-
   m.cd.ef:RegisterEvent("CHAT_MSG_BG_SYSTEM_NEUTRAL")
-  function m.cd.ef:CHAT_MSG_BG_SYSTEM_NEUTRAL(msg)
-    local function contains(tb, target)
-      for i, v in ipairs(tb) do
-          if v == target then return true end
-      end
-      return false 
-    end
-
-    if contains(pvp_timers["sixty"], msg) then
-      m.cd.timer = 61
-    elseif contains(pvp_timers["thirty"], msg)then
-      m.cd.timer = 31
-    elseif contains(pvp_timers["fifteen"], msg) then
-      m.cd.timer = 16
-    end
-  end
+  m.cd.ef:RegisterEvent("CHAT_MSG_SYSTEM")
 
   m.cd.pf = CreateFrame("Frame", "CountdownParent", UIParent)
   m.cd.pf:SetHeight(256)
