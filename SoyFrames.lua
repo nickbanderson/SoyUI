@@ -6,6 +6,7 @@ SoyUI.modules.SoyFrames = {
   uf = {},
 }
 local m = SoyUI.modules.SoyFrames
+local C = SoyUI.COLORS
 
 local function createBar(name, size, color)
   local f = CreateFrame("Frame", name, UIParent)
@@ -14,7 +15,7 @@ local function createBar(name, size, color)
   f:SetHeight(size[2])
   
   local t = f:CreateTexture(nil, "BACKGROUND")
-  t:SetTexture(color[1], color[2], color[3]) -- color = {r, g, b}
+  t:SetTexture(unpack(color)) -- color = {r, g, b}
   t:SetAllPoints(f)
   f.texture = t
  
@@ -124,19 +125,19 @@ end
 
 function UnitFrame:updateMeta()
   self.frames.background.text:SetText(GetUnitName(self.unit))
+
   local t = UnitPowerType(self.unit)
-  local color = {
-    [0] = {0, 0, 255},    -- mana
-    [1] = {255, 0, 0},    -- rage
-    [2] = {255, 128, 64}, -- focus
-    [3] = {255, 255, 0},  -- energy
-    [6] = {0, 209, 255},  -- runic power
-  }
-  if color[t] == nil then
-    print(self.unit .. " " .. t)
-    error("unit power type doesn't have color defined in addon")
-  end
-  self.frames.power.texture:SetTexture(color[t][1], color[t][2], color[t][3])
+  self.frames.power.texture:SetTexture(unpack(C.POWER[t]))
+
+  local class = UnitIsPlayer(self.unit) 
+                  and select(2, UnitClass(self.unit)) 
+                  or "NPC"
+  print(self.unit .. " class = " .. class .. " {" .. 
+        C.CLASS[class][1] .. ", " ..
+        C.CLASS[class][2] .. ", " .. 
+        C.CLASS[class][3] .. "}")
+  -- self.frames.hp.texture:SetTexture(unpack(C.CLASS[class]))
+  self.frames.hp.texture:SetTexture(unpack({100, 100, 100}))
 end
 
 function UnitFrame:show()

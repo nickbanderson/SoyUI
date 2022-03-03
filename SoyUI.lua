@@ -1,5 +1,27 @@
 local myAddonName, SoyUI = ...
 SoyUI.modules = {}
+SoyUI.COLORS = {
+  POWER = {
+    [0] = {0, 0, 255},    -- mana
+    [1] = {255, 0, 0},    -- rage
+    [2] = {255, 128, 64}, -- focus
+    [3] = {255, 255, 0},  -- energy
+    [6] = {0, 209, 255},  -- runic power
+  },
+  CLASS = {
+    NPC = {0, 255, 0},
+    DEATHKNIGHT  = {197, 30, 58},
+    DRUID  = {255, 124, 10},
+    HUNTER  = {170, 211, 114},
+    MAGE  = {63, 199, 235},
+    PALADIN  = {244, 140, 186},
+    PRIEST  = {255, 255, 255},
+    ROGUE  = {255, 244, 104},
+    SHAMAN  = {0, 112, 221},
+    WARLOCK  = {135, 136, 238},
+    WARRIOR = {198, 155, 109},
+  },
+}
 
 local function dump(o)
   if type(o) == 'table' then
@@ -71,15 +93,3 @@ SLASH_SOYUI1 = "/soyui"
 SlashCmdList["SOYUI"] = function()
   initDatabaseWithDefaults()
 end
-
--- -- toy function: PoC for switch pattern
--- function f:prant(arg)
---   ({
---     ["a"] = function() 
---       SoyPrint("a pranted lol")
---     end,
---     ["b"] = function() 
---       SoyPrint("b pranted lol")
---     end
---   })[arg]() -- if {}[arg] doesnt exist, it returns nil; can i use this to define an inline default case?
--- end
