@@ -90,6 +90,25 @@ function SoyUI.F:ADDON_LOADED()
 end
 
 SLASH_SOYUI1 = "/soyui"
-SlashCmdList["SOYUI"] = function()
-  initDatabaseWithDefaults()
+SlashCmdList["SOYUI"] = function(msg)
+  args = {}
+  for word in msg:gmatch("%S+") do
+    table.insert(args, word)
+  end
+
+  ({
+    [""] = function(args)
+      SoyUI.print("SoyUI: a hardcore addon for hardcore retards")
+    end,
+    ["db"] = function(args)
+      ({
+        ["dump"] = function()
+          SoyUI.print(SoyUI_DB)
+        end,
+        ["reset"] = function()
+          initDatabaseWithDefaults()
+        end,
+      })[args[2]]()
+    end,
+  })[args[1] or ""](args)
 end
