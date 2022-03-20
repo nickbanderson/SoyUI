@@ -61,7 +61,7 @@ function m.init()
   registerSlashReload()
   setCVars()
   if SoyUI_DB.SoyTweaks.showArenaNumberOnNameplate then
-    -- enableArenaNumberOnNameplate()
+    enableArenaNumberOnNameplate()
   end
   disableAutoAddSpell()
 end
