@@ -4,12 +4,7 @@ SoyUI.modules.SoyTweaks = {
   defaults = {
     showArenaNumberOnNameplate = true,
   },
-  cd = {
-    ef = nil,
-    pf = nil,
-    hidden = false,
-    timer = -1,
-  }
+
 }
 local m = SoyUI.modules.SoyTweaks
 
