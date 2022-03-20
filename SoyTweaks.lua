@@ -2,8 +2,13 @@ local _, SoyUI = ...
 SoyUI.modules.SoyTweaks = {
   init = nil,
   defaults = {
-    showArenaNumberOnNameplate = true,
+    cvars = {
+      showArenaNumberOnNameplate = true,
+      cursorsizepreferred = 1, -- 0, 1, 2
+    },
   },
+
+
 
 }
 local m = SoyUI.modules.SoyTweaks
@@ -17,6 +22,9 @@ local function registerSlashReload()
 end
 
 local function setCVars()
+  for cvar, value in pairs(m.defaults.cvars) do
+    SetCVar(cvar, value)
+  end
 end
 
 local function enableArenaNumberOnNameplate()
