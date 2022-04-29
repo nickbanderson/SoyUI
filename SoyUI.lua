@@ -23,6 +23,24 @@ SoyUI.COLORS = {
   },
 }
 
+-- AUTOMATICALLY TRAVERSE LEVELS
+--   if {}[index] is a table, then traverse otherwise call it
+function table:switch(self, args, depth)
+  index = args[depth]
+  if index == Nil then index = "" end
+
+  self[index](args)
+end
+
+function string:split(self, delim)
+  delim = delim or "%S+" -- default: whitespace
+  elements = {}
+  for element in self:gmatch(delim) do
+    table.insert(elements, element)
+  end
+  return elements
+end
+
 local function dump(o)
   if type(o) == 'table' then
     local s = '{ '
@@ -91,24 +109,37 @@ end
 
 SLASH_SOYUI1 = "/soyui"
 SlashCmdList["SOYUI"] = function(msg)
-  args = {}
-  for word in msg:gmatch("%S+") do
-    table.insert(args, word)
-  end
+  -- args = {}
+  -- for word in msg:gmatch("%S+") do
+  --   table.insert(args, word)
+  -- end
+  args = string.split(msg)
 
-  ({
+  table.switch({
     [""] = function(args)
       SoyUI.print("SoyUI: a hardcore addon for hardcore retards")
     end,
-    ["db"] = function(args)
-      ({
-        ["dump"] = function()
-          SoyUI.print(SoyUI_DB)
-        end,
-        ["reset"] = function()
-          initDatabaseWithDefaults()
-        end,
-      })[args[2]]()
-    end,
-  })[args[1] or ""](args)
+    ["db"] = function(args) table.switch({
+      ["dump"] = function()
+        SoyUI.print(SoyUI_DB)
+      end,
+      ["reset"] = function()
+        initDatabaseWithDefaults()
+      end,
+    }, args, 2) end,
+  }, args, 1)
+
+  -- ({
+  --   [""] = function(args)
+  --     SoyUI.print("SoyUI: a hardcore addon for hardcore retards")
+  --   end,
+  --   ["db"] = function(args) ({
+  --     ["dump"] = function()
+  --       SoyUI.print(SoyUI_DB)
+  --     end,
+  --     ["reset"] = function()
+  --       initDatabaseWithDefaults()
+  --     end,
+  --   })[args[2]]() end,
+  -- })[args[1] or ""](args)
 end
