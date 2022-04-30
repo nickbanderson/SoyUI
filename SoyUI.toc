@@ -3,7 +3,7 @@
 ## Title: SoyUI
 ## Author: Soylord
 ## Version: 1
-## Notes: Module-based UI enhancer
+## Notes: Hardcore addon for hardcore retards
 ## SavedVariables: SoyUI_DB
 
 SoyUI.lua
