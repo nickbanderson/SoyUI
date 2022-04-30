@@ -23,6 +23,9 @@ SoyUI.COLORS = {
   },
 }
 
+-- alias
+local print = SoyUI.util.print
+
 local function initDatabaseWithDefaults()
   SoyUI.util.print('initializing SoyUI_DB with defaults')
   SoyUI_DB = {}
@@ -35,7 +38,7 @@ local function initDatabaseWithDefaults()
 end
 
 local function initGUI()
-  -- SoyUI.util.print("init gui")
+  -- print("init gui")
   SoyUI.InterfaceOptionsPanel = CreateFrame(
     "Frame", "SoyUIInterfaceOptionsPanel", UIParent)
   SoyUI.InterfaceOptionsPanel.name = "SoyUI"
@@ -63,7 +66,7 @@ function SoyUI.F:ADDON_LOADED()
   if SoyUI_DB == nil then initDatabaseWithDefaults() end
   initGUI()
   for moduleName, module in pairs(SoyUI.modules) do
-    -- SoyUI.util.print('initting module ' .. moduleName)
+    -- print('initting module ' .. moduleName)
     module.init()
   end
 end

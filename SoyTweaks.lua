@@ -11,6 +11,9 @@ SoyUI.modules.SoyTweaks = {
     timer = -1,
   }
 }
+
+-- aliases
+local print = SoyUI.util.print
 local m = SoyUI.modules.SoyTweaks
 
 local pvp_timers = {
@@ -110,20 +113,16 @@ local function enablePvpCountdowns()
     local ones_digit = math.floor(m.cd.timer % 10)
     local tens_digit = math.floor(m.cd.timer / 10)
 
-    -- SoyUI.util.print(tens_digit .. " and " .. ones_digit)
-
     ones:SetTexture("Interface\\Addons\\SoyUI\\assets\\" .. ones_digit)
     ones:Show()
 
     if tens_digit ~= 0 then
       tens:SetTexture("Interface\\Addons\\SoyUI\\assets\\" .. tens_digit)
       tens:Show()
-      -- SoyUI.util.print("tens on")
       ones:SetPoint("CENTER", m.cd.pf, 48, 0)
     else
       tens:Hide()
       ones:SetPoint("CENTER", m.cd.pf, 0, 0)
-      -- SoyUI.util.print("tens off")
     end
   end)
 end

@@ -7,6 +7,9 @@ SoyUI.modules.SoyFilter = {
 	},
 	ef = nil,
 }
+
+-- aliases
+local print = SoyUI.util.print
 local m = SoyUI.modules.SoyFilter
 
 SLASH_SOYFILTER1 = "/sf"
@@ -15,17 +18,17 @@ SlashCmdList["SOYFILTER"] = function(msg)
 	if msg == "toggle" then
 		filterSPAM = not filterSPAM
 		if (filterSPAM == false) then
-			SoyUI.util.print("Spam filter enabled")
+			print("Spam filter enabled")
 		else
-			SoyUI.util.print("Spam filter disabled until reload")
+			print("Spam filter disabled until reload")
 		end
 
 	elseif msg == "verbose" then
 		verbose = not verbose
 		if (verbose == true) then
-		  SoyUI.util.print("Verbose filtering enabled until reload")
+		  print("Verbose filtering enabled until reload")
 		else
-		  SoyUI.util.print("Verbose filtering disabled")
+		  print("Verbose filtering disabled")
 		end
 
 	elseif msg == "words" then
@@ -37,7 +40,7 @@ SlashCmdList["SOYFILTER"] = function(msg)
 			end
 			result = result .. SoyUI_DB.SoyFilter.filterWords[i]
 		end
-		SoyUI.util.print(result)
+		print(result)
 
 	elseif msg == "reset" then
 		SoyUI_DB.SoyFilter.filterWords = {}
@@ -51,10 +54,10 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		-- If there is not an array, we will have to create it.
 		if SoyUI_DB.SoyFilter.filterWords then
 			table.insert(SoyUI_DB.SoyFilter.filterWords,string.lower(msg))
-		  SoyUI.util.print("Added " .. msg)
+		  print("Added " .. msg)
 		else
 			SoyUI_DB.SoyFilter.filterWords = {msg}
-		  SoyUI.util.print("Added " .. msg)
+		  print("Added " .. msg)
 		end 
 
 	elseif msg:find("remove", 0, true) then
@@ -68,9 +71,9 @@ SlashCmdList["SOYFILTER"] = function(msg)
 					table.remove(SoyUI_DB.SoyFilter.filterWords,i)
 				end
 			end
-		  SoyUI.util.print("Removed " .. msg)
+		  print("Removed " .. msg)
 		else
-		  SoyUI.util.print("No custom user words found")
+		  print("No custom user words found")
 		end 	
 
   elseif msg:find("threshold", 0, true) then
@@ -79,24 +82,24 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
 		msg = string.gsub(msg, "^%s", "") -- remove any spaces from the end
 		if msg == "" then 
-			SoyUI.util.print("Current threshold is " .. SoyUI_DB.SoyFilter.matchThreshold)
+			print("Current threshold is " .. SoyUI_DB.SoyFilter.matchThreshold)
 	  elseif tonumber(msg) > 0 and tonumber(msg) < 100 then
 			SoyUI_DB.SoyFilter.matchThreshold = tonumber(msg)
-			SoyUI.util.print("New threshold of " .. SoyUI_DB.SoyFilter.matchThreshold)
+			print("New threshold of " .. SoyUI_DB.SoyFilter.matchThreshold)
 		else
-			SoyUI.util.print("Bad argument.")
+			print("Bad argument.")
 		end
 
 	else
-		SoyUI.util.print("List of commands")
-		SoyUI.util.print("/sf toggle")
-		SoyUI.util.print("/sf words     lists spam words")
-		SoyUI.util.print("/sf add WORD     add one word")
-		SoyUI.util.print("/sf remove WORD     remove one word")
-		SoyUI.util.print("/sf verbose     show filtered msgs")
-		SoyUI.util.print("/sf reset     remove all saved words.")
-		SoyUI.util.print("/sf threshold     view match threshold for filter")
-		SoyUI.util.print("/sf threshold NUMBER     change match threshold")
+		print("List of commands")
+		print("/sf toggle")
+		print("/sf words     lists spam words")
+		print("/sf add WORD     add one word")
+		print("/sf remove WORD     remove one word")
+		print("/sf verbose     show filtered msgs")
+		print("/sf reset     remove all saved words.")
+		print("/sf threshold     view match threshold for filter")
+		print("/sf threshold NUMBER     change match threshold")
 
 	end
 end
@@ -105,7 +108,7 @@ local function filter(frame, event, message, sender, ...)
 	-- filter from horde (not working :( )
 	-- englishFaction, _ = UnitFactionGroup(sender)
 	-- if englishFaction ~= nil then
-	-- 	SoyUI.util.print(englishFaction)
+	-- 	print(englishFaction)
 	-- end
 
 	-- check matched keywords
@@ -120,7 +123,7 @@ local function filter(frame, event, message, sender, ...)
 	end
 
 	if matchCount >= SoyUI_DB.SoyFilter.matchThreshold then
-		if verbose then SoyUI.util.print("Filtered: " .. message) end
+		if verbose then print("Filtered: " .. message) end
 		return true -- hide this message
   end
 end

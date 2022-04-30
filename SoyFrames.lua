@@ -5,6 +5,9 @@ SoyUI.modules.SoyFrames = {
   },
   uf = {},
 }
+
+-- aliases
+local print = SoyUI.util.print
 local m = SoyUI.modules.SoyFrames
 local C = SoyUI.COLORS
 
@@ -194,6 +197,6 @@ function m.init()
           m.uf.focus:hide() 
         end
       end,
-    })[event] or SoyUI.util.print("UNMATCHED EVENT"))()
+    })[event] or print("UNMATCHED EVENT"))()
   end)
 end
