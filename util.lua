@@ -20,6 +20,8 @@ end
 SoyUI.util.print = function(msg)
   if type(msg) == 'table' then
     msg = SoyUI.util.stringify(msg)
+  elseif msg == nil then
+    msg = "nil"
   end
 
   DEFAULT_CHAT_FRAME:AddMessage("|cff00eeffSoyUI:|r " .. msg)	
