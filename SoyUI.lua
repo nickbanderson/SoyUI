@@ -23,29 +23,8 @@ SoyUI.COLORS = {
   },
 }
 
-local function dump(o)
-  if type(o) == 'table' then
-    local s = '{ '
-    for k,v in pairs(o) do
-      if type(k) ~= 'number' then k = '"'..k..'"' end
-      s = s .. '['..k..'] = ' .. dump(v) .. ','
-    end
-    return s .. '} '
-  else
-    return tostring(o)
-  end
-end
-
-function SoyUI.print(msg)
-  if type(msg) == 'table' then
-    msg = dump(msg)
-  end
-
-	DEFAULT_CHAT_FRAME:AddMessage("|cff00ff00SoyUI:|r " .. msg)	
-end
-
 local function initDatabaseWithDefaults()
-  SoyUI.print('initializing SoyUI_DB with defaults')
+  SoyUI.util.print('initializing SoyUI_DB with defaults')
   SoyUI_DB = {}
   for moduleName, module in pairs(SoyUI.modules) do
     SoyUI_DB[moduleName] = { enabled = true }
@@ -56,7 +35,7 @@ local function initDatabaseWithDefaults()
 end
 
 local function initGUI()
-  -- SoyUI.print("init gui")
+  -- SoyUI.util.print("init gui")
   SoyUI.InterfaceOptionsPanel = CreateFrame(
     "Frame", "SoyUIInterfaceOptionsPanel", UIParent)
   SoyUI.InterfaceOptionsPanel.name = "SoyUI"
@@ -84,7 +63,7 @@ function SoyUI.F:ADDON_LOADED()
   if SoyUI_DB == nil then initDatabaseWithDefaults() end
   initGUI()
   for moduleName, module in pairs(SoyUI.modules) do
-    -- SoyUI.print('initting module ' .. moduleName)
+    -- SoyUI.util.print('initting module ' .. moduleName)
     module.init()
   end
 end

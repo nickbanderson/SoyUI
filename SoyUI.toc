@@ -6,6 +6,7 @@
 ## Notes: Hardcore addon for hardcore retards
 ## SavedVariables: SoyUI_DB
 
+util.lua
 SoyUI.lua
 SoyTweaks.lua
 SoyFilter.lua

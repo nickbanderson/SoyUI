@@ -195,6 +195,6 @@ function m.init()
           m.uf.focus:hide() 
         end
       end,
-    })[event] or print("UNMATCHED EVENT"))()
+    })[event] or SoyUI.util.print("UNMATCHED EVENT"))()
   end)
 end

@@ -110,7 +110,7 @@ local function enablePvpCountdowns()
     local ones_digit = math.floor(m.cd.timer % 10)
     local tens_digit = math.floor(m.cd.timer / 10)
 
-    -- SoyUI.print(tens_digit .. " and " .. ones_digit)
+    -- SoyUI.util.print(tens_digit .. " and " .. ones_digit)
 
     ones:SetTexture("Interface\\Addons\\SoyUI\\assets\\" .. ones_digit)
     ones:Show()
@@ -118,12 +118,12 @@ local function enablePvpCountdowns()
     if tens_digit ~= 0 then
       tens:SetTexture("Interface\\Addons\\SoyUI\\assets\\" .. tens_digit)
       tens:Show()
-      -- SoyUI.print("tens on")
+      -- SoyUI.util.print("tens on")
       ones:SetPoint("CENTER", m.cd.pf, 48, 0)
     else
       tens:Hide()
       ones:SetPoint("CENTER", m.cd.pf, 0, 0)
-      -- SoyUI.print("tens off")
+      -- SoyUI.util.print("tens off")
     end
   end)
 end
