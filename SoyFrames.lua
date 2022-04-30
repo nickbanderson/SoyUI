@@ -8,8 +8,8 @@ SoyUI.modules.SoyFrames = {
 local m = SoyUI.modules.SoyFrames
 local C = SoyUI.COLORS
 
-local function createBar(name, size, color)
-  local f = CreateFrame("Frame", name, UIParent)
+local function createBar(name, size, color, parent)
+  local f = CreateFrame("Frame", name, parent)
   f:SetFrameStrata("LOW")
   f:SetWidth(size[1])
   f:SetHeight(size[2])
@@ -86,7 +86,8 @@ function UnitFrame:new(unit, x, y)
   local background = createBar(
     uf.name .. "_background", 
     {uf.barWidth + 2 * uf.padding, 2 * uf.barHeight + 3 * uf.padding},
-    {0, 0, 0}
+    {0, 0, 0},
+    UIParent
   )
   background:SetPoint("CENTER", x, y)
   background.text = background:CreateFontString(uf.name .. "_bgText", "MEDIUM",
@@ -96,7 +97,8 @@ function UnitFrame:new(unit, x, y)
   local hp = createBar(
     uf.name .. "_hp",
     {uf.barWidth, uf.barHeight},
-    {0, 120, 0}
+    {0, 120, 0},
+    background
   )
   hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
               uf.padding, -1 * uf.padding)
@@ -106,7 +108,8 @@ function UnitFrame:new(unit, x, y)
   local power = createBar(
     uf.name .. "_power",
     {uf.barWidth, uf.barHeight},
-    {0, 0, 120}
+    {0, 0, 120},
+    background
   )
   power:SetPoint("BOTTOMLEFT", uf.name .. "_background",
                  "BOTTOMLEFT", uf.padding, uf.padding)
@@ -154,15 +157,11 @@ function UnitFrame:show()
   self:updateMeta()
   self:updateHp()
   self:updatePower()
-  for i, f in pairs(self.frames) do
-    f:Show()
-  end
+  self.frames.background:Show()
 end
 
 function UnitFrame:hide()
-  for i, f in pairs(self.frames) do
-    f:Hide()
-  end
+  self.frames.background:Hide()
 end
 
 function m.init()
