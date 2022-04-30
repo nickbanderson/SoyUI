@@ -99,7 +99,7 @@ function UnitFrame:new(unit, x, y)
     {0, 120, 0}
   )
   hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
-                        uf.padding, -1 * uf.padding)
+              uf.padding, -1 * uf.padding)
   hp.text = hp:CreateFontString(uf.name .. "_hpText", "MEDIUM", "GameTooltipText")
   hp.text:SetPoint("BOTTOM", uf.name .. "_background" , "CENTER", 0, uf.padding)
 
@@ -109,7 +109,7 @@ function UnitFrame:new(unit, x, y)
     {0, 0, 120}
   )
   power:SetPoint("BOTTOMLEFT", uf.name .. "_background",
-                           "BOTTOMLEFT", uf.padding, uf.padding)
+                 "BOTTOMLEFT", uf.padding, uf.padding)
   power.text = power:CreateFontString(uf.name .. "_powerText", "MEDIUM", "GameTooltipText")
   power.text:SetPoint("TOP", uf.name .. "_background" , "CENTER", 0, -1 * uf.padding)
 
@@ -198,4 +198,3 @@ function m.init()
     })[event] or print("UNMATCHED EVENT"))()
   end)
 end
-
