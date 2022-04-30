@@ -27,7 +27,7 @@ SoyUI.COLORS = {
 local print = SoyUI.util.print
 
 local function initDatabaseWithDefaults()
-  SoyUI.util.print('initializing SoyUI_DB with defaults')
+  print('initializing SoyUI_DB with defaults')
   SoyUI_DB = {}
   for moduleName, module in pairs(SoyUI.modules) do
     SoyUI_DB[moduleName] = { enabled = true }
