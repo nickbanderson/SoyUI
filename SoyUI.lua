@@ -71,7 +71,20 @@ function SoyUI.F:ADDON_LOADED()
   end
 end
 
-SLASH_SOYUI1 = "/soyui"
-SlashCmdList["SOYUI"] = function()
-  initDatabaseWithDefaults()
+SLASH_SOY1 = "/soy"
+SlashCmdList["SOY"] = function(msg)
+  if msg == '' or msg == nil then
+    msg = "help"
+  end
+
+  msg = SoyUI.util.split(msg, " ") 
+
+  if msg[1] == "help" then
+    print("lol this retard needs help")
+  elseif msg[1] == "reset" then
+    initDatabaseWithDefaults()
+    print("database reset to defaults")
+  elseif msg[1] == "db" then
+    print(SoyUI_DB)
+  end
 end
