@@ -25,7 +25,6 @@ local function createBar(name, size, color, parent)
   return f
 end
 
-
 -- meta class
 local UnitFrame = {
   unit = nil,
@@ -167,10 +166,14 @@ function m.init()
   m.uf.target:hide()
 
   local ef = CreateFrame("Frame", "SoyFrames_ef", UIParent)
+  ef:RegisterEvent("PLAYER_LOGIN")
   ef:RegisterEvent("PLAYER_TARGET_CHANGED")
   ef:RegisterEvent("PLAYER_FOCUS_CHANGED")
   ef:SetScript("OnEvent", function(s, event, ...)
     (({
+      PLAYER_LOGIN = function() 
+        m.uf.player:show()
+      end,
       PLAYER_TARGET_CHANGED = function() 
         if UnitExists("target") then 
           m.uf.target:show() 
