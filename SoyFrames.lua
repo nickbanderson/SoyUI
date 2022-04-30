@@ -49,6 +49,7 @@ UnitFrame.__index = UnitFrame
 
 function UnitFrame:SetUpdateScripts()
   self.frames.hp:RegisterEvent("UNIT_HEALTH")
+  self.frames.hp:RegisterEvent("UNIT_MAXHEALTH")
   self.frames.hp:SetScript("OnEvent",
     function(f, event, ...)
       local u = ...
@@ -57,6 +58,16 @@ function UnitFrame:SetUpdateScripts()
   )
 
   self.frames.power:RegisterEvent("UNIT_MANA")
+  self.frames.power:RegisterEvent("UNIT_RAGE")
+  self.frames.power:RegisterEvent("UNIT_ENERGY")
+  self.frames.power:RegisterEvent("UNIT_FOCUS")
+  self.frames.power:RegisterEvent("UNIT_RUNIC_POWER")
+  self.frames.power:RegisterEvent("UNIT_DISPLAYPOWER") -- eg, shapeshift
+  self.frames.power:RegisterEvent("UNIT_MAXMANA")
+  self.frames.power:RegisterEvent("UNIT_MAXRAGE")
+  self.frames.power:RegisterEvent("UNIT_MAXENERGY")
+  self.frames.power:RegisterEvent("UNIT_MAXFOCUS")
+  self.frames.power:RegisterEvent("UNIT_MAXRUNIC_POWER")
   self.frames.power:SetScript("OnEvent",
     function(f, event, ...)
       local u = ...
@@ -118,8 +129,12 @@ function UnitFrame:updateHp()
 end
 
 function UnitFrame:updatePower()
-  self.frames.power:SetWidth(self.barWidth * 
-                             (UnitPower(self.unit) / UnitPowerMax(self.unit)))
+  if UnitPower(self.unit) == 0 then
+    self.frames.power:SetWidth(.001) -- can't set width to 0, but this works
+  else
+    self.frames.power:SetWidth(self.barWidth *
+                               (UnitPower(self.unit) / UnitPowerMax(self.unit)))
+  end
   self.frames.power.text:SetText(fmtNum(UnitPower(self.unit)))
 end
 
