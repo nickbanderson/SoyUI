@@ -33,3 +33,16 @@ SoyUI.util.split = function(str)
   end
   return words
 end
+
+-- 342 => 342, 1234 => 1.2k, 1234234 => 1.2mil
+SoyUI.util.fmtNum = function(num)
+  if num < 1000 then
+    return num
+  end
+    
+  local n = #tostring(num)
+  local suffix = n > 6 and "m" or "k"
+  local split = n > 6 and n - 6 or n - 3
+  return string.sub(tostring(num), 0, split) .. "." 
+          .. string.sub(tostring(num), split + 1, split + 1) .. suffix
+end

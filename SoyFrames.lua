@@ -25,18 +25,6 @@ local function createBar(name, size, color, parent)
   return f
 end
 
--- 342 => 342, 1234 => 1.2k, 1234234 => 1.2mil
-local function fmtNum(num)
-  if num < 1000 then
-    return num
-  end
-    
-  local n = #tostring(num)
-  local suffix = n > 6 and "m" or "k"
-  local split = n > 6 and n - 6 or n - 3
-  return string.sub(tostring(num), 0, split) .. "." 
-          .. string.sub(tostring(num), split + 1, split + 1) .. suffix
-end
 
 -- meta class
 local UnitFrame = {
@@ -131,7 +119,7 @@ end
 function UnitFrame:updateHp()
   self.frames.hp:SetWidth(self.barWidth * 
                           (UnitHealth(self.unit) / UnitHealthMax(self.unit)))
-  self.frames.hp.text:SetText(fmtNum(UnitHealth(self.unit)))
+  self.frames.hp.text:SetText(SoyUI.util.fmtNum(UnitHealth(self.unit)))
 end
 
 function UnitFrame:updatePower()
@@ -141,7 +129,7 @@ function UnitFrame:updatePower()
     self.frames.power:SetWidth(self.barWidth *
                                (UnitPower(self.unit) / UnitPowerMax(self.unit)))
   end
-  self.frames.power.text:SetText(fmtNum(UnitPower(self.unit)))
+  self.frames.power.text:SetText(SoyUI.util.fmtNum(UnitPower(self.unit)))
 end
 
 function UnitFrame:updateMeta()
