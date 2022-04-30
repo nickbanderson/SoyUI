@@ -93,15 +93,3 @@ SLASH_SOYUI1 = "/soyui"
 SlashCmdList["SOYUI"] = function()
   initDatabaseWithDefaults()
 end
-
--- -- toy function: PoC for switch pattern
--- function f:prant(arg)
---   ({
---     ["a"] = function() 
---       SoyPrint("a pranted lol")
---     end,
---     ["b"] = function() 
---       SoyPrint("b pranted lol")
---     end
---   })[arg]() -- if {}[arg] doesnt exist, it returns nil; can i use this to define an inline default case?
--- end
