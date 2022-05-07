@@ -84,6 +84,16 @@ SlashCmdList["SOY"] = function(msg)
   elseif msg[1] == "reset" then
     initDatabaseWithDefaults()
     print("database reset to defaults")
+  elseif msg[1] == "unlock" then
+    for unit_name, unit_frame in pairs(SoyUI.modules.SoyFrames.uf) do
+      unit_frame:unlock()
+    end
+    print("frames unlocked")
+  elseif msg[1] == "lock" then
+    for unit_name, unit_frame in pairs(SoyUI.modules.SoyFrames.uf) do
+      unit_frame:lock()
+    end
+    print("frames locked")
   elseif msg[1] == "db" then
     print(SoyUI_DB)
   end

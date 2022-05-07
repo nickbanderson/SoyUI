@@ -2,6 +2,9 @@ local _, SoyUI = ...
 SoyUI.modules.SoyFrames = {
   init = nil,
   defaults = {
+    player = {x = 500, y = 300},
+    target = {x = 700, y = 300},
+    focus = {x = 300, y = 300},
   },
   uf = {},
 }
@@ -79,10 +82,26 @@ function UnitFrame:new(unit, x, y)
     {0, 0, 0},
     UIParent
   )
+  background.unit = unit
   background:SetPoint("CENTER", x, y)
   background.text = background:CreateFontString(uf.name .. "_bgText", "MEDIUM",
                                                 "GameTooltipText")
   background.text:SetPoint("BOTTOMLEFT", background, "TOPLEFT", 0, 0)
+  background:EnableMouse(true)
+  background:SetClampedToScreen(true) -- keep frame on screen
+  background:RegisterForDrag("LeftButton")
+  background:SetScript("OnDragStart", function(self)
+    if background:IsMovable() then
+      self:StartMoving()
+    end
+  end)
+  background:SetScript("OnDragStop", function(self)
+    if background:IsMovable() then
+      self:StopMovingOrSizing()
+      SoyUI_DB.SoyFrames[self.unit].x = self:GetLeft()
+      SoyUI_DB.SoyFrames[self.unit].y = self:GetBottom()
+    end
+  end)
 
   local hp = createBar(
     uf.name .. "_hp",
@@ -143,10 +162,17 @@ function UnitFrame:updateMeta()
   self.frames.hp.texture:SetTexture(unpack(class_color))
 end
 
+function UnitFrame:updatePosition()
+  self.frames.background:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT",
+                                  SoyUI_DB.SoyFrames[self.unit].x, 
+                                  SoyUI_DB.SoyFrames[self.unit].y)
+end
+
 function UnitFrame:show()
   self:updateMeta()
   self:updateHp()
   self:updatePower()
+  self:updatePosition()
   self.frames.background:Show()
 end
 
@@ -154,16 +180,24 @@ function UnitFrame:hide()
   self.frames.background:Hide()
 end
 
+function UnitFrame:unlock()
+  self.frames.background:SetMovable(true)
+end
+
+function UnitFrame:lock()
+  self.frames.background:SetMovable(false)
+end
+
 function m.init()
-  m.uf.player = UnitFrame:new("player", 300, 0)
+  m.uf.player = UnitFrame:new("player")
   m.uf.player:hide()
   m.uf.player:show()
 
-  m.uf.focus = UnitFrame:new("focus", 300, -100)
-  m.uf.focus:hide()
-
-  m.uf.target = UnitFrame:new("target", 600, 0)
+  m.uf.target = UnitFrame:new("target")
   m.uf.target:hide()
+
+  m.uf.focus = UnitFrame:new("focus")
+  m.uf.focus:hide()
 
   local ef = CreateFrame("Frame", "SoyFrames_ef", UIParent)
   ef:RegisterEvent("PLAYER_LOGIN")
