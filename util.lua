@@ -48,3 +48,10 @@ SoyUI.util.fmtNum = function(num)
   return string.sub(tostring(num), 0, split) .. "." 
           .. string.sub(tostring(num), split + 1, split + 1) .. suffix
 end
+
+-- return class (eg "DEATHKNIGHT") or "NPC" if not player
+SoyUI.util.UnitClass = function(unit)
+  return UnitIsPlayer(unit) 
+          and select(2, UnitClass(unit))
+          or "NPC"
+end

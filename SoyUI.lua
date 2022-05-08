@@ -2,11 +2,26 @@ local myAddonName, SoyUI = ...
 SoyUI.modules = {}
 SoyUI.COLORS = {
   POWER = {
-    [0] = {0, 0, 1},    -- mana
-    [1] = {1, 0, 0},    -- rage
-    [2] = {1, .502, .251}, -- focus
-    [3] = {1, 1, 0},  -- energy
-    [6] = {0, .820, 1},  -- runic power
+    [0] = { -- mana
+      main = {0, 0, 1},    
+      lighter = {.678, .847, .902},
+    },
+    [1] = { -- rage
+      main = {1, 0, 0},    
+      lighter = {1, .6, .597},
+    },
+    [2] = { -- focus
+      main = {1, .502, .251},    
+      lighter = {.996, .847, .694},
+    },
+    [3] = { -- energy
+      main = {1, 1, 0},    
+      lighter = {1, 1, .878},
+    },
+    [6] = { -- runic power
+      main = {0, .820, 1},    
+      lighter = {.635, .777, .828},
+    },
   },
   CLASS = {
     NPC = {0, 1, 0},
@@ -21,6 +36,9 @@ SoyUI.COLORS = {
     WARLOCK  = {.529, .533, .933},
     WARRIOR = {.776, .608, .427},
   },
+  red = {.8, .1, .2},
+  yellow = {1, .9, .4},
+  green = {0, .9, 0},
 }
 
 -- alias

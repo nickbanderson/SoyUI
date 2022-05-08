@@ -11,6 +11,7 @@ SoyUI.modules.SoyFrames = {
 
 -- aliases
 local print = SoyUI.util.print
+local UnitClass = SoyUI.util.UnitClass
 local m = SoyUI.modules.SoyFrames
 local C = SoyUI.COLORS
 
@@ -24,6 +25,11 @@ local function createBar(name, size, color, parent)
   t:SetTexture(unpack(color))
   t:SetAllPoints(f)
   f.texture = t
+
+  -- frames can't be zero width, but this works
+  function f:SetZeroableWidth(width)
+    self:SetWidth(width > 0 and width or .001)
+  end
  
   return f
 end
@@ -135,31 +141,36 @@ function UnitFrame:new(unit, x, y)
 end
 
 function UnitFrame:updateHp()
-  self.frames.hp:SetWidth(self.barWidth * 
-                          (UnitHealth(self.unit) / UnitHealthMax(self.unit)))
+  local proportion = UnitHealth(self.unit) / UnitHealthMax(self.unit)
+  self.frames.hp:SetZeroableWidth(proportion * self.barWidth)
   self.frames.hp.text:SetText(SoyUI.util.fmtNum(UnitHealth(self.unit)))
+
+  if proportion > .7 then
+    self.frames.hp.text:SetTextColor(SoyUI.COLORS.green[1], SoyUI.COLORS.green[2],
+                          SoyUI.COLORS.green[3], 1)
+  elseif proportion > .2 then
+    self.frames.hp.text:SetTextColor(SoyUI.COLORS.yellow[1], SoyUI.COLORS.yellow[2],
+                          SoyUI.COLORS.yellow[3], 1)
+  else
+    self.frames.hp.text:SetTextColor(SoyUI.COLORS.red[1], SoyUI.COLORS.red[2],
+                          SoyUI.COLORS.red[3], 1)
+  end
 end
 
 function UnitFrame:updatePower()
-  if UnitPower(self.unit) == 0 then
-    self.frames.power:SetWidth(.001) -- can't set width to 0, but this works
-  else
-    self.frames.power:SetWidth(self.barWidth *
-                               (UnitPower(self.unit) / UnitPowerMax(self.unit)))
-  end
+  local proportion = UnitPower(self.unit) / UnitPowerMax(self.unit)
+  self.frames.power:SetZeroableWidth(proportion * self.barWidth)
   self.frames.power.text:SetText(SoyUI.util.fmtNum(UnitPower(self.unit)))
 end
 
 function UnitFrame:updateMeta()
   self.frames.background.text:SetText(GetUnitName(self.unit))
 
-  local power_color = C.POWER[UnitPowerType(self.unit)]
-  self.frames.power.texture:SetTexture(unpack(power_color))
+  local power_type = UnitPowerType(self.unit) 
+  self.frames.power.texture:SetTexture(unpack(C.POWER[power_type].main))
+  self.frames.power.text:SetTextColor(unpack(C.POWER[power_type].lighter))
 
-  local class_color  = UnitIsPlayer(self.unit) 
-                        and C.CLASS[select(2, UnitClass(self.unit))]
-                        or C.CLASS["NPC"]
-  self.frames.hp.texture:SetTexture(unpack(class_color))
+  self.frames.hp.texture:SetTexture(unpack(C.CLASS[UnitClass(self.unit)]))
 end
 
 function UnitFrame:updatePosition()
