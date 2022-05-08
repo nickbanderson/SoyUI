@@ -109,6 +109,37 @@ function UnitFrame:new(unit, x, y)
     end
   end)
 
+  local function handleKeybind(self, type, ...)
+    if type == "LeftButton" then
+      print('target kek')
+      -- TargetUnit(self.unit) -- cant do this so easily bc its protected
+    elseif type == "RightButton" then
+      local background = "SoyFrames_"..self.unit.."_background"
+      if self.unit == 'player' then
+        ToggleDropDownMenu(1, nil, PlayerFrameDropDown, background, 0, 0)
+      elseif self.unit == 'target' then
+        ToggleDropDownMenu(1, nil, TargetFrameDropDown, background, 0, 0)
+      elseif self.unit == 'focus' then
+        ToggleDropDownMenu(1, nil, FocusFrameDropDown, background, 0, 0)
+      end
+    elseif type == "MiddleButton" then
+        print(type)
+    elseif type == "Button4" then
+        print(type)
+    elseif type == "Button5" then
+        print(type)
+    elseif type == 1 then -- scroll up
+        print('scroll up')
+    elseif type == -1 then -- scroll down
+        print('scroll down')
+    else
+      print("UNMATCHED EVENT: "..type)
+    end
+  end
+  background:SetScript("OnMouseDown", handleKeybind)
+  background:SetScript("OnKeyDown", handleKeybind)
+  background:SetScript("OnMouseWheel", handleKeybind)
+  background:EnableMouseWheel(true)
   local hp = createBar(
     uf.name .. "_hp",
     {uf.barWidth, uf.barHeight},
