@@ -5,6 +5,7 @@ SoyUI.modules.SoyFrames = {
     player = {x = 500, y = 300},
     target = {x = 700, y = 300},
     focus = {x = 300, y = 300},
+    hp_to_pow_height_ratio = 1.2,
   },
   uf = {},
 }
@@ -39,8 +40,8 @@ local UnitFrame = {
   unit = nil,
   hp = nil,
   power = nil,
-  barWidth = 140,
-  barHeight = 15,
+  width = 140,
+  height = 35,
   padding = 2,
   frames = {},
 }
@@ -84,7 +85,7 @@ function UnitFrame:new(unit, x, y)
 
   local background = createBar(
     uf.name .. "_background", 
-    {uf.barWidth + 2 * uf.padding, 2 * uf.barHeight + 3 * uf.padding},
+    {uf.width + 2 * uf.padding, uf.height + 3 * uf.padding},
     {0, 0, 0},
     UIParent
   )
@@ -142,25 +143,27 @@ function UnitFrame:new(unit, x, y)
   background:EnableMouseWheel(true)
   local hp = createBar(
     uf.name .. "_hp",
-    {uf.barWidth, uf.barHeight},
+    {uf.width,
+     uf.height * (SoyUI_DB.SoyFrames.hp_to_pow_height_ratio / 2)},
     {0, 120, 0},
     background
   )
   hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
               uf.padding, -1 * uf.padding)
   hp.text = hp:CreateFontString(uf.name .. "_hpText", "MEDIUM", "GameTooltipText")
-  hp.text:SetPoint("BOTTOM", uf.name .. "_background" , "CENTER", 0, uf.padding)
+  hp.text:SetPoint("CENTER", uf.name .. "_hp" , "CENTER", 0, 0)
 
   local power = createBar(
     uf.name .. "_power",
-    {uf.barWidth, uf.barHeight},
+    {uf.width, 
+     uf.height * (1 - SoyUI_DB.SoyFrames.hp_to_pow_height_ratio / 2)},
     {0, 0, 120},
     background
   )
   power:SetPoint("BOTTOMLEFT", uf.name .. "_background",
                  "BOTTOMLEFT", uf.padding, uf.padding)
   power.text = power:CreateFontString(uf.name .. "_powerText", "MEDIUM", "GameTooltipText")
-  power.text:SetPoint("TOP", uf.name .. "_background" , "CENTER", 0, -1 * uf.padding)
+  power.text:SetPoint("CENTER", uf.name .. "_power" , "CENTER", 0, 0)
 
   uf.frames = {
     background = background,
@@ -173,7 +176,7 @@ end
 
 function UnitFrame:updateHp()
   local proportion = UnitHealth(self.unit) / UnitHealthMax(self.unit)
-  self.frames.hp:SetZeroableWidth(proportion * self.barWidth)
+  self.frames.hp:SetZeroableWidth(proportion * self.width)
   self.frames.hp.text:SetText(SoyUI.util.fmtNum(UnitHealth(self.unit)))
 
   if proportion > .7 then
@@ -190,7 +193,7 @@ end
 
 function UnitFrame:updatePower()
   local proportion = UnitPower(self.unit) / UnitPowerMax(self.unit)
-  self.frames.power:SetZeroableWidth(proportion * self.barWidth)
+  self.frames.power:SetZeroableWidth(proportion * self.width)
   self.frames.power.text:SetText(SoyUI.util.fmtNum(UnitPower(self.unit)))
 end
 
