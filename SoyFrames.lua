@@ -151,7 +151,8 @@ function UnitFrame:new(unit, x, y)
   hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
               uf.padding, -1 * uf.padding)
   hp.text = hp:CreateFontString(uf.name .. "_hpText", "MEDIUM", "GameTooltipText")
-  hp.text:SetPoint("CENTER", uf.name .. "_hp" , "CENTER", 0, 0)
+  hp.text:SetPoint("CENTER", uf.name .. "_hp" , "LEFT",
+                   uf.width / 2 + uf.padding, 0)
 
   local power = createBar(
     uf.name .. "_power",
@@ -163,7 +164,8 @@ function UnitFrame:new(unit, x, y)
   power:SetPoint("BOTTOMLEFT", uf.name .. "_background",
                  "BOTTOMLEFT", uf.padding, uf.padding)
   power.text = power:CreateFontString(uf.name .. "_powerText", "MEDIUM", "GameTooltipText")
-  power.text:SetPoint("CENTER", uf.name .. "_power" , "CENTER", 0, 0)
+  power.text:SetPoint("CENTER", uf.name .. "_power" , "LEFT", 
+                      uf.width / 2 + uf.padding, 0)
 
   uf.frames = {
     background = background,
