@@ -3,6 +3,7 @@ SoyUI.modules.SoyFrames = {
   init = nil,
   defaults = {
     player = {x = 500, y = 300},
+    pet = {x = 600, y = 300},
     target = {x = 700, y = 300},
     focus = {x = 300, y = 300},
     hp_to_pow_height_ratio = 1.2,
@@ -240,6 +241,9 @@ function m.init()
   m.uf.player:hide()
   m.uf.player:show()
 
+  m.uf.pet = UnitFrame:new("pet")
+  m.uf.pet:hide()
+
   m.uf.target = UnitFrame:new("target")
   m.uf.target:hide()
 
@@ -248,12 +252,21 @@ function m.init()
 
   local ef = CreateFrame("Frame", "SoyFrames_ef", UIParent)
   ef:RegisterEvent("PLAYER_LOGIN")
+  ef:RegisterEvent("UNIT_PET")
   ef:RegisterEvent("PLAYER_TARGET_CHANGED")
   ef:RegisterEvent("PLAYER_FOCUS_CHANGED")
   ef:SetScript("OnEvent", function(s, event, ...)
     (({
       PLAYER_LOGIN = function() 
         m.uf.player:show()
+      end,
+      UNIT_PET = function()
+        local has_pet_ui, _ = HasPetUI()
+        if has_pet_ui then
+          m.uf.pet:show()
+        else
+          m.uf.pet:hide()
+        end
       end,
       PLAYER_TARGET_CHANGED = function() 
         if UnitExists("target") then 
