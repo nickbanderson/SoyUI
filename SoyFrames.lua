@@ -248,6 +248,8 @@ function m.init()
   ef:RegisterEvent("UNIT_PET")
   ef:RegisterEvent("PLAYER_TARGET_CHANGED")
   ef:RegisterEvent("PLAYER_FOCUS_CHANGED")
+  ef:RegisterEvent("PLAYER_REGEN_DISABLED")
+  ef:RegisterEvent("PLAYER_REGEN_ENABLED")
   ef:SetScript("OnEvent", function(s, event, ...)
     (({
       PLAYER_LOGIN = function() 
@@ -275,6 +277,20 @@ function m.init()
           m.uf.focus:hide() 
         end
       end,
-    })[event] or print("UNMATCHED EVENT"))()
+      UNIT_COMBAT = function(...)
+        local unit, _, _, _, _ = ...
+        setCombatIndicator(unit)
+      end,
+      UNIT_HEALTH = function(...)
+        local unit = ...
+        setCombatIndicator(unit)
+      end,
+      PLAYER_REGEN_DISABLED = function()
+        m.uf.player.frames.background.text:SetTextColor(unpack(C.red))
+      end,
+      PLAYER_REGEN_ENABLED = function()
+        m.uf.player.frames.background.text:SetTextColor(unpack(C.white))
+      end,
+    })[event] or print("UNMATCHED EVENT"))(...)
   end)
 end

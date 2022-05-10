@@ -39,6 +39,7 @@ SoyUI.COLORS = {
   red = {.8, .1, .2},
   yellow = {1, .9, .4},
   green = {0, .9, 0},
+  white = {1, 1, 1},
 }
 
 -- alias
