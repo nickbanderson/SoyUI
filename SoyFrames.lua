@@ -182,16 +182,9 @@ function UnitFrame:updateHp()
   self.frames.hp:SetZeroableWidth(proportion * self.width)
   self.frames.hp.text:SetText(SoyUI.util.fmtNum(UnitHealth(self.unit)))
 
-  if proportion > .7 then
-    self.frames.hp.text:SetTextColor(SoyUI.COLORS.green[1], SoyUI.COLORS.green[2],
-                          SoyUI.COLORS.green[3], 1)
-  elseif proportion > .2 then
-    self.frames.hp.text:SetTextColor(SoyUI.COLORS.yellow[1], SoyUI.COLORS.yellow[2],
-                          SoyUI.COLORS.yellow[3], 1)
-  else
-    self.frames.hp.text:SetTextColor(SoyUI.COLORS.red[1], SoyUI.COLORS.red[2],
-                          SoyUI.COLORS.red[3], 1)
-  end
+  self.frames.hp.text:SetTextColor(unpack(proportion > .7 and C.green or
+                                          proportion > .2 and C.yellow or
+                                          C.red))
 end
 
 function UnitFrame:updatePower()
