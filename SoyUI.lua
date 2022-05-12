@@ -63,12 +63,10 @@ local function initGUI()
 
   local function makeSlider(label, initial_val, pos, range, size, setter)
     size = size or {100, 15}
+    local frame_name = "SoyUI_configPanel"..label.."Slider"
 
-    local slider = CreateFrame(
-      "Slider",
-      "SoyUI_configPanel" .. label .."Slider",
-      SoyUI.configPanel, 
-      "OptionsSliderTemplate")
+    local slider = CreateFrame("Slider", frame_name, SoyUI.configPanel, 
+                               "OptionsSliderTemplate")
     slider:SetWidth(size[1])
     slider:SetHeight(size[2])
     slider:SetMinMaxValues(range[1], range[2])
@@ -76,6 +74,10 @@ local function initGUI()
     slider:SetValue(initial_val)
     slider:SetPoint("TOPLEFT", pos[1], pos[2])
     slider:SetScript("OnValueChanged", setter)
+
+    getglobal(frame_name.."Low"):SetText(range[1])
+    getglobal(frame_name.."High"):SetText(range[2])
+    getglobal(frame_name.."Text"):SetText(label)
   end
 
   makeSlider(
