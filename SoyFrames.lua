@@ -6,7 +6,7 @@ SoyUI.modules.SoyFrames = {
     pet = {x = 600, y = 300},
     target = {x = 700, y = 300},
     focus = {x = 300, y = 300},
-    hp_to_pow_height_ratio = 1.2,
+    hp_height__pct = 60,
   },
   uf = {},
 }
@@ -34,6 +34,14 @@ local function createBar(name, size, color, parent)
   end
  
   return f
+end
+
+local function calcHpHeight(total_height)
+  return total_height * (SoyUI_DB.SoyFrames.hp_height__pct / 100)
+end
+
+local function calcPowHeight(total_height)
+  return total_height * (1 - SoyUI_DB.SoyFrames.hp_height__pct / 100)
 end
 
 -- meta class
@@ -96,7 +104,7 @@ function UnitFrame:new(unit, x, y)
                                                 "GameTooltipText")
   background.text:SetPoint("BOTTOMLEFT", background, "TOPLEFT", 0, 0)
   background:EnableMouse(true)
-  background:SetClampedToScreen(true) -- keep frame on screen
+  background:SetClampedToScreen(true) -- keep frame on screen (while dragging)
   background:RegisterForDrag("LeftButton")
   background:SetScript("OnDragStart", function(self)
     if background:IsMovable() then
@@ -113,7 +121,7 @@ function UnitFrame:new(unit, x, y)
 
   local function handleKeybind(self, type, ...)
     if type == "LeftButton" then
-      print('target kek')
+      -- print('target kek')
       -- TargetUnit(self.unit) -- cant do this so easily bc its protected
     elseif type == "RightButton" then
       local background = "SoyFrames_"..self.unit.."_background"
@@ -144,8 +152,7 @@ function UnitFrame:new(unit, x, y)
   background:EnableMouseWheel(true)
   local hp = createBar(
     uf.name .. "_hp",
-    {uf.width,
-     uf.height * (SoyUI_DB.SoyFrames.hp_to_pow_height_ratio / 2)},
+    {uf.width, calcHpHeight(self.height)},
     {0, 120, 0},
     background
   )
@@ -157,8 +164,7 @@ function UnitFrame:new(unit, x, y)
 
   local power = createBar(
     uf.name .. "_power",
-    {uf.width, 
-     uf.height * (1 - SoyUI_DB.SoyFrames.hp_to_pow_height_ratio / 2)},
+    {uf.width, calcPowHeight(self.height)},
     {0, 0, 120},
     background
   )
@@ -227,6 +233,11 @@ end
 
 function UnitFrame:lock()
   self.frames.background:SetMovable(false)
+end
+
+function UnitFrame:reload()
+  self.frames.hp:SetHeight(calcHpHeight(self.height))
+  self.frames.power:SetHeight(calcPowHeight(self.height))
 end
 
 function m.init()

@@ -57,19 +57,45 @@ local function initDatabaseWithDefaults()
 end
 
 local function initGUI()
-  -- print("init gui")
-  SoyUI.InterfaceOptionsPanel = CreateFrame(
-    "Frame", "SoyUIInterfaceOptionsPanel", UIParent)
-  SoyUI.InterfaceOptionsPanel.name = "SoyUI"
+  SoyUI.configPanel = CreateFrame("Frame", "SoyUI_configPanel", UIParent)
+  SoyUI.configPanel.name = myAddonName
+  SoyUI.configPanel:Hide()
 
-  local testButton = CreateFrame(
-    "Button", "testButton",
-    SoyUI.InterfaceOptionsPanel, "UIPanelButtonTemplate")
-  testButton:SetWidth(80)
-  testButton:SetHeight(22)
-  testButton:SetText("Test Button")
+  local function makeSlider(label, initial_val, pos, range, size, setter)
+    size = size or {100, 15}
 
-  InterfaceOptions_AddCategory(SoyUI.InterfaceOptionsPanel)
+    local slider = CreateFrame(
+      "Slider",
+      "SoyUI_configPanel" .. label .."Slider",
+      SoyUI.configPanel, 
+      "OptionsSliderTemplate")
+    slider:SetWidth(size[1])
+    slider:SetHeight(size[2])
+    slider:SetMinMaxValues(range[1], range[2])
+    slider:SetValueStep(range[3])
+    slider:SetValue(initial_val)
+    slider:SetPoint("TOPLEFT", pos[1], pos[2])
+    slider:SetScript("OnValueChanged", setter)
+  end
+
+  makeSlider(
+    "Hp Height (%)", SoyUI_DB.SoyFrames.hp_height__pct,
+    {30, -30}, {0, 100, 1}, nil,
+    function(self, value)
+      SoyUI_DB.SoyFrames.hp_height__pct = value
+      for _, uf in pairs(SoyUI.modules.SoyFrames.uf) do
+        uf:reload()
+      end
+    end)
+
+  -- local testButton = CreateFrame(
+  --   "Button", "testButton",
+  --   SoyUI.configPanel, "UIPanelButtonTemplate")
+  -- testButton:SetWidth(80)
+  -- testButton:SetHeight(22)
+  -- testButton:SetText("Test Button")
+
+  InterfaceOptions_AddCategory(SoyUI.configPanel)
 end
 
 SoyUI.F = CreateFrame("Frame", "SoyUIController") 
@@ -93,7 +119,9 @@ end
 SLASH_SOY1 = "/soy"
 SlashCmdList["SOY"] = function(msg)
   if msg == '' or msg == nil then
-    msg = "help"
+    InterfaceOptionsFrame_Show()
+    InterfaceOptionsFrame_OpenToCategory(myAddonName)
+    return
   end
 
   msg = SoyUI.util.split(msg, " ") 
