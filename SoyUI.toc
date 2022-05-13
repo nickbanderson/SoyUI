@@ -10,4 +10,5 @@ util.lua
 SoyUI.lua
 SoyTweaks.lua
 SoyFilter.lua
+UnitFrame.lua
 SoyFrames.lua
