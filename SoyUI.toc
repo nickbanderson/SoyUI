@@ -6,9 +6,13 @@
 ## Notes: Hardcore addon for hardcore retards
 ## SavedVariables: SoyUI_DB
 
+# helpers and classes
 util.lua
+UnitFrame.lua
+
+# core and modules
 SoyUI.lua
+SoyConfig.lua
 SoyTweaks.lua
 SoyFilter.lua
-UnitFrame.lua
 SoyFrames.lua

@@ -15,72 +15,6 @@ local function initDatabaseWithDefaults()
   end
 end
 
-local function initGUI()
-  SoyUI.configPanel = CreateFrame("Frame", "SoyUI_configPanel", UIParent)
-  SoyUI.configPanel.name = myAddonName
-  SoyUI.configPanel:Hide()
-
-  local function makeSlider(label, initial_val, pos, range, size, setter)
-    size = size or {100, 15}
-    local frame_name = "SoyUI_configPanel" .. string.gsub(label, "%s+", "")
-                        .."Slider"
-
-    local slider = CreateFrame("Slider", frame_name, SoyUI.configPanel, 
-                               "OptionsSliderTemplate")
-    slider:SetWidth(size[1])
-    slider:SetHeight(size[2])
-    slider:SetMinMaxValues(range[1], range[2])
-    slider:SetValueStep(range[3])
-    slider:SetValue(initial_val)
-    slider:SetPoint("TOPLEFT", pos[1], pos[2])
-
-    getglobal(frame_name.."Low"):SetText(range[1])
-    getglobal(frame_name.."High"):SetText(range[2])
-    getglobal(frame_name.."Text"):SetText(label)
-
-    local box = CreateFrame("EditBox", frame_name.."EditBox", slider, 
-                            "InputBoxTemplate")
-    box:SetWidth(30)
-    box:SetHeight(15)
-    box:SetPoint("TOP", slider, "BOTTOM", 0, 0)
-    box:EnableMouse(true)
-    box:SetAutoFocus(false)
-    box:SetText(initial_val)
-
-    local function hookedSetter(val)
-      val = SoyUI.util.constrainValue(val, {range[1], range[2]})
-      setter(val)
-      slider:SetValue(val)
-      box:SetText(val)
-      box:ClearFocus()
-    end
-
-    slider:SetScript("OnValueChanged", 
-                     function(self, val) hookedSetter(val) end)
-    box:SetScript("OnEnterPressed", 
-                  function(self) hookedSetter(self:GetText()) end)
-  end
-
-  makeSlider(
-    "Hp Height (%)", SoyUI_DB.SoyFrames.hp_height__pct,
-    {30, -30}, {0, 100, 1}, nil,
-    function(value)
-      SoyUI_DB.SoyFrames.hp_height__pct = value
-      for _, uf in pairs(SoyUI.modules.SoyFrames.uf) do
-        uf:reload()
-      end
-    end)
-
-  -- local testButton = CreateFrame(
-  --   "Button", "testButton",
-  --   SoyUI.configPanel, "UIPanelButtonTemplate")
-  -- testButton:SetWidth(80)
-  -- testButton:SetHeight(22)
-  -- testButton:SetText("Test Button")
-
-  InterfaceOptions_AddCategory(SoyUI.configPanel)
-end
-
 SoyUI.F = CreateFrame("Frame", "SoyUIController") 
 SoyUI.F:RegisterEvent("ADDON_LOADED")
 SoyUI.F:SetScript("OnEvent", function(self, event, addonName) 
@@ -92,11 +26,12 @@ end)
 
 function SoyUI.F:ADDON_LOADED()
   if SoyUI_DB == nil then initDatabaseWithDefaults() end
-  initGUI()
   for moduleName, module in pairs(SoyUI.modules) do
-    -- print('initting module ' .. moduleName)
-    module.init()
+    if moduleName ~= "SoyConfig" then
+      module.init()
+    end
   end
+  SoyUI.modules.SoyConfig.init()
 end
 
 SLASH_SOY1 = "/soy"
