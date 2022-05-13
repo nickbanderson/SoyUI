@@ -63,7 +63,8 @@ local function initGUI()
 
   local function makeSlider(label, initial_val, pos, range, size, setter)
     size = size or {100, 15}
-    local frame_name = "SoyUI_configPanel"..label.."Slider"
+    local frame_name = "SoyUI_configPanel" .. string.gsub(label, "%s+", "")
+                        .."Slider"
 
     local slider = CreateFrame("Slider", frame_name, SoyUI.configPanel, 
                                "OptionsSliderTemplate")
@@ -73,17 +74,38 @@ local function initGUI()
     slider:SetValueStep(range[3])
     slider:SetValue(initial_val)
     slider:SetPoint("TOPLEFT", pos[1], pos[2])
-    slider:SetScript("OnValueChanged", setter)
 
     getglobal(frame_name.."Low"):SetText(range[1])
     getglobal(frame_name.."High"):SetText(range[2])
     getglobal(frame_name.."Text"):SetText(label)
+
+    local box = CreateFrame("EditBox", frame_name.."EditBox", slider, 
+                            "InputBoxTemplate")
+    box:SetWidth(30)
+    box:SetHeight(15)
+    box:SetPoint("TOP", slider, "BOTTOM", 0, 0)
+    box:EnableMouse(true)
+    box:SetAutoFocus(false)
+    box:SetText(initial_val)
+
+    local function hookedSetter(val)
+      val = SoyUI.util.constrainValue(val, {range[1], range[2]})
+      setter(val)
+      slider:SetValue(val)
+      box:SetText(val)
+      box:ClearFocus()
+    end
+
+    slider:SetScript("OnValueChanged", 
+                     function(self, val) hookedSetter(val) end)
+    box:SetScript("OnEnterPressed", 
+                  function(self) hookedSetter(self:GetText()) end)
   end
 
   makeSlider(
     "Hp Height (%)", SoyUI_DB.SoyFrames.hp_height__pct,
     {30, -30}, {0, 100, 1}, nil,
-    function(self, value)
+    function(value)
       SoyUI_DB.SoyFrames.hp_height__pct = value
       for _, uf in pairs(SoyUI.modules.SoyFrames.uf) do
         uf:reload()

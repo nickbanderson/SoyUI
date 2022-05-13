@@ -55,3 +55,7 @@ SoyUI.util.UnitClass = function(unit)
           and select(2, UnitClass(unit))
           or "NPC"
 end
+
+SoyUI.util.constrainValue = function(val, limits)
+  return math.max(limits[1], math.min(val, limits[2]))
+end
