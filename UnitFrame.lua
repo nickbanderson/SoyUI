@@ -3,8 +3,7 @@ local _, SoyUI = ...
 -- aliases
 local print = SoyUI.util.print
 local UnitClass = SoyUI.util.UnitClass
-local m = SoyUI.modules.SoyFrames
-local C = SoyUI.COLORS
+local C = SoyUI.util.COLORS
 
 local function createBar(name, size, color, parent)
   local f = CreateFrame("Frame", name, parent)
