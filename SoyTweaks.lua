@@ -16,25 +16,6 @@ SoyUI.modules.SoyTweaks = {
 local print = SoyUI.util.print
 local m = SoyUI.modules.SoyTweaks
 
-local pvp_timers = {
-  [3] = {
-    "Duel starting: 3",
-  },
-  [15] = {
-    "Fifteen seconds until",
-  },
-  [30] = {
-    "Thirty seconds until",
-    "begins in 30 seconds",
-    "begin in 30 seconds",
-  },
-  [60] = {
-    "One minute until",
-    "begins in 1 minute.",
-    "begin in 1 minute.",
-  },
-}
-
 local function registerSlashReload()
   SLASH_SOYUI_RELOAD1 = "/rl"
   SlashCmdList["SOYUI_RELOAD"] = function()
@@ -64,6 +45,25 @@ local function enablePvpCountdowns()
   m.cd.ef = CreateFrame("Frame")
   function m.cd.ef:OnEvent(event, ...)
     local msg = ...
+    local pvp_timers = {
+      [3] = {
+        "Duel starting: 3",
+      },
+      [15] = {
+        "Fifteen seconds until",
+      },
+      [30] = {
+        "Thirty seconds until",
+        "begins in 30 seconds",
+        "begin in 30 seconds",
+      },
+      [60] = {
+        "One minute until",
+        "begins in 1 minute.",
+        "begin in 1 minute.",
+      },
+    }
+
     for timer, strings in pairs(pvp_timers) do
       for i, string in ipairs(strings) do
         if msg:find(string, 0, true) then
