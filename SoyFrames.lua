@@ -14,6 +14,7 @@ SoyUI.modules.SoyFrames = {
 -- aliases
 local print = SoyUI.util.print
 local m = SoyUI.modules.SoyFrames
+local C = SoyUI.COLORS
 
 function m.init()
   m.uf.player = SoyUI.UnitFrame:new("player")
