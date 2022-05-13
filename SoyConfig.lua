@@ -15,12 +15,27 @@ local function addModuleTabs()
   local function createTab(mod_name, tab_i, anchor)
     tabs[mod_name] = CreateFrame('Button', "SoyConfigPanel"..mod_name.."Tab",
                             m.configPanel, "OptionsFrameTabButtonTemplate")
+    tabs[mod_name]:SetPoint("BOTTOMLEFT", anchor[1], anchor[2], 0, 0)
     tabs[mod_name]:SetID(tab_i + 1) -- 1-base indexing
     tabs[mod_name]:SetText(mod_name)
     -- if i want to edit this text: tabs[mod_name]:GetFontString()
     -- https://wowwiki-archive.fandom.com/wiki/Widget_API#Button
 
-    tabs[mod_name]:SetPoint("BOTTOMLEFT", anchor[1], anchor[2], 0, 0)
+    tabs[mod_name]:SetScript("OnClick", function (self, button)
+      for _, tab in pairs(tabs) do
+        if (tab.widgets) then
+          for _, widget in pairs(tab.widgets) do
+            widget:Hide()
+          end
+        end
+      end
+
+      if (self.widgets) then
+        for _, widget in pairs(self.widgets) do
+          widget:Show() 
+        end
+      end
+    end)
   end
 
   local tab_i = 0
@@ -73,6 +88,8 @@ local function makeSlider(label, initial_val, pos, range, size, setter)
                     function(self, val) hookedSetter(val) end)
   box:SetScript("OnEnterPressed", 
                 function(self) hookedSetter(self:GetText()) end)
+
+  return slider
 end
 
 function m.init()
@@ -82,15 +99,17 @@ function m.init()
 
   local tabs = addModuleTabs()
 
-  makeSlider(
-    "Hp Height (%)", SoyUI_DB.SoyFrames.hp_height__pct,
-    {30, -30}, {0, 100, 1}, nil,
-    function(value)
-      SoyUI_DB.SoyFrames.hp_height__pct = value
-      for _, uf in pairs(SoyUI.modules.SoyFrames.uf) do
-        uf:reload()
-      end
-    end)
+  tabs.SoyFrames.widgets = {
+    makeSlider(
+      "Hp Height (%)", SoyUI_DB.SoyFrames.hp_height__pct,
+      {30, -30}, {0, 100, 1}, nil,
+      function(value)
+        SoyUI_DB.SoyFrames.hp_height__pct = value
+        for _, uf in pairs(SoyUI.modules.SoyFrames.uf) do
+          uf:reload()
+        end
+      end),
+  }
 
   InterfaceOptions_AddCategory(m.configPanel)
 end
