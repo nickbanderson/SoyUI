@@ -12,24 +12,26 @@ local C = SoyUI.util.COLORS
 local function addModuleTabs()
   local tabs = {}
 
-  local tab_i = 0
-  local anchor = m.configPanel -- first, anchor tab to panel, then to prev tab
-  for name, _ in pairs(SoyUI.modules) do
-    tabs[name] = CreateFrame('Button', "SoyConfigPanel"..name.."Tab",
-                             m.configPanel, "OptionsFrameTabButtonTemplate")
-    tabs[name]:SetID(tab_i + 1)
-    tabs[name]:SetText(name)
-    -- if i want to edit this text: tabs[name]:GetFontString()
+  local function createTab(mod_name, tab_i, anchor)
+    tabs[mod_name] = CreateFrame('Button', "SoyConfigPanel"..mod_name.."Tab",
+                            m.configPanel, "OptionsFrameTabButtonTemplate")
+    tabs[mod_name]:SetID(tab_i + 1) -- 1-base indexing
+    tabs[mod_name]:SetText(mod_name)
+    -- if i want to edit this text: tabs[mod_name]:GetFontString()
     -- https://wowwiki-archive.fandom.com/wiki/Widget_API#Button
 
-    if tab_i == 0 then
-      tabs[name]:SetPoint("BOTTOMLEFT", anchor, "TOPLEFT", 0, 0)
-    else
-      tabs[name]:SetPoint("BOTTOMLEFT", anchor, "BOTTOMRIGHT", 0, 0)
-    end
+    tabs[mod_name]:SetPoint("BOTTOMLEFT", anchor[1], anchor[2], 0, 0)
+  end
 
-    tab_i = tab_i + 1
-    anchor = tabs[name]
+  local tab_i = 0
+  createTab("SoyConfig", tab_i, {m.configPanel, "TOPLEFT"})
+  local anchor = tabs["SoyConfig"]
+  for mod_name, _ in pairs(SoyUI.modules) do
+    if mod_name ~= "SoyConfig" then 
+      tab_i = tab_i + 1
+      createTab(mod_name, tab_i, {anchor, "BOTTOMRIGHT"}) 
+      anchor = tabs[mod_name]
+    end
   end
 
   return tabs
