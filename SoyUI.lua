@@ -5,7 +5,6 @@ SoyUI.modules = {}
 local print = SoyUI.util.print
 
 local function initDatabaseWithDefaults()
-  print('initializing SoyUI_DB with defaults')
   SoyUI_DB = {}
   for moduleName, module in pairs(SoyUI.modules) do
     SoyUI_DB[moduleName] = { enabled = true }
@@ -13,6 +12,7 @@ local function initDatabaseWithDefaults()
       SoyUI_DB[moduleName][key] = default_value
     end
   end
+  print('SoyUI_DB reinitialized with defaults')
 end
 
 SoyUI.F = CreateFrame("Frame", "SoyUIController") 
@@ -48,7 +48,6 @@ SlashCmdList["SOY"] = function(msg)
     print("lol this retard needs help")
   elseif msg[1] == "reset" then
     initDatabaseWithDefaults()
-    print("database reset to defaults")
   elseif msg[1] == "unlock" then
     for unit_name, unit_frame in pairs(SoyUI.modules.SoyFrames.uf) do
       unit_frame:unlock()
