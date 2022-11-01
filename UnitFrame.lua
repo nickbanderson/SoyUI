@@ -4,6 +4,7 @@ local _, SoyUI = ...
 local print = SoyUI.util.print
 local UnitClass = SoyUI.util.UnitClass
 local C = SoyUI.util.COLORS
+local PT = SoyUI.util.POWER_TYPE
 
 local function createBar(name, size, color, parent)
   local f = CreateFrame("Frame", name, parent)
@@ -181,6 +182,14 @@ function SoyUI.UnitFrame:new(unit, x, y)
   power.text:SetPoint("CENTER", uf.name .. "_power" , "LEFT", 
                       uf.width / 2 + uf.padding, 0)
 
+  if UnitClass(unit) == "DRUID" then
+    power.druid_text = power:CreateFontString(uf.name .. "_powerDruidText", "MEDIUM",
+    "GameTooltipText")
+    power.druid_text:SetFont(default_font_path, font_size * 0.9, "OUTLINE")
+    power.druid_text:SetPoint("LEFT", uf.name .. "_power" , "LEFT", uf.padding, 0)
+    power.druid_text:SetTextColor(unpack(C.POWER[PT.MANA].lighter))
+  end
+
   uf.frames = {
     background = background,
     hp = hp,
@@ -204,6 +213,11 @@ function SoyUI.UnitFrame:updatePower()
   local proportion = UnitPower(self.unit) / UnitPowerMax(self.unit)
   self.frames.power:SetZeroableWidth(proportion * self.width)
   self.frames.power.text:SetText(SoyUI.util.fmtNum(UnitPower(self.unit)))
+
+  if self.frames.power.druid_text ~= nil then
+    self.frames.power.druid_text:SetText(
+      SoyUI.util.fmtNum(UnitPower(self.unit, PT.MANA)))
+  end
 end
 
 function SoyUI.UnitFrame:updateMeta()
@@ -212,6 +226,14 @@ function SoyUI.UnitFrame:updateMeta()
   local power_type = UnitPowerType(self.unit) 
   self.frames.power.texture:SetTexture(unpack(C.POWER[power_type].main))
   self.frames.power.text:SetTextColor(unpack(C.POWER[power_type].lighter))
+
+  if self.frames.power.druid_text ~= nil then
+    if power_type ~= PT.MANA then
+      self.frames.power.druid_text:Show()
+    else
+      self.frames.power.druid_text:Hide()
+    end
+  end
 
   self.frames.hp.texture:SetTexture(unpack(C.CLASS[UnitClass(self.unit)]))
 end
