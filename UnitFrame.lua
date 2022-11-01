@@ -54,9 +54,16 @@ function SoyUI.UnitFrame:SetUpdateScripts()
     end
   )
 
+  -- UNIT_ENERGY is insufficient for energy; updates are too slow
+  if UnitClass(self.unit) == "ROGUE" or UnitClass(self.unit) == "DRUID" then
+    print("speedy update on " .. self.unit)
+    self.frames.power:HookScript("OnUpdate", function(f, _)
+      self:updatePower()
+    end)
+  end
+
   self.frames.power:RegisterEvent("UNIT_MANA")
   self.frames.power:RegisterEvent("UNIT_RAGE")
-  self.frames.power:RegisterEvent("UNIT_ENERGY")
   self.frames.power:RegisterEvent("UNIT_FOCUS")
   self.frames.power:RegisterEvent("UNIT_RUNIC_POWER")
   self.frames.power:RegisterEvent("UNIT_DISPLAYPOWER") -- eg, shapeshift
