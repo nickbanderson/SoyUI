@@ -62,11 +62,11 @@ function SoyUI.UnitFrame:SetUpdateScripts()
     end)
   end
 
+  self.frames.power:RegisterEvent("UNIT_DISPLAYPOWER") -- eg, shapeshift
   self.frames.power:RegisterEvent("UNIT_MANA")
   self.frames.power:RegisterEvent("UNIT_RAGE")
   self.frames.power:RegisterEvent("UNIT_FOCUS")
   self.frames.power:RegisterEvent("UNIT_RUNIC_POWER")
-  self.frames.power:RegisterEvent("UNIT_DISPLAYPOWER") -- eg, shapeshift
   self.frames.power:RegisterEvent("UNIT_MAXMANA")
   self.frames.power:RegisterEvent("UNIT_MAXRAGE")
   self.frames.power:RegisterEvent("UNIT_MAXENERGY")
@@ -76,8 +76,13 @@ function SoyUI.UnitFrame:SetUpdateScripts()
     function(f, event, ...)
       local u = ...
       if u == self.unit then self:updatePower() end
+
+      if event == "UNIT_DISPLAYPOWER" then
+        self:updateMeta()
+      end
     end
   )
+
 end
 
 function SoyUI.UnitFrame:new(unit, x, y)
