@@ -2,6 +2,13 @@ local myAddonName, SoyUI = ...
 
 SoyUI.util = {}
 
+SoyUI.util.POWER_TYPE = { -- incomplete, hard to find source
+  MANA = 0,
+  RAGE = 1,
+  FOCUS = 2,
+  ENERGY = 3,
+}
+
 SoyUI.util.COLORS = {
   POWER = {
     [0] = { -- mana
