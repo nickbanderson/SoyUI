@@ -233,7 +233,9 @@ function SoyUI.UnitFrame:updatePower()
 end
 
 function SoyUI.UnitFrame:updateMeta()
-  self.frames.background.name_text:SetText(GetUnitName(self.unit))
+  local unit_name = GetUnitName(self.unit)
+  if UnitIsPartyLeader(self.unit) then unit_name = "*" .. unit_name end
+  self.frames.background.name_text:SetText(unit_name)
   self.frames.background.level_text:SetText(UnitLevel(self.unit))
   local reaction_color = SoyUI.util.UnitReactionColor(self.unit)
   self.frames.background.level_text:SetTextColor(unpack(reaction_color or {1, 1, 1}))
