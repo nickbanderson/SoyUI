@@ -15,9 +15,9 @@ local function initDatabaseWithDefaults()
   print('SoyUI_DB reinitialized with defaults')
 end
 
-SoyUI.F = CreateFrame("Frame", "SoyUIController") 
+SoyUI.F = CreateFrame("Frame", "SoyUIController")
 SoyUI.F:RegisterEvent("ADDON_LOADED")
-SoyUI.F:SetScript("OnEvent", function(self, event, addonName) 
+SoyUI.F:SetScript("OnEvent", function(self, event, addonName)
   if addonName == myAddonName then 
     SoyUI.F[event](self)
     SoyUI.F:UnregisterEvent(event)
@@ -42,7 +42,7 @@ SlashCmdList["SOY"] = function(msg)
     return
   end
 
-  msg = SoyUI.util.split(msg, " ") 
+  msg = SoyUI.util.split(msg, " ")
 
   if msg[1] == "help" then
     print("lol this retard needs help")

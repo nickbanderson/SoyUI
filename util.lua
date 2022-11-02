@@ -111,13 +111,13 @@ SoyUI.util.fmtNum = function(num)
   local n = #tostring(num)
   local suffix = n > 6 and "m" or "k"
   local split = n > 6 and n - 6 or n - 3
-  return string.sub(tostring(num), 0, split) .. "." 
+  return string.sub(tostring(num), 0, split) .. "."
           .. string.sub(tostring(num), split + 1, split + 1) .. suffix
 end
 
 -- return class (eg "DEATHKNIGHT") or "NPC" if not player
 SoyUI.util.UnitClass = function(unit)
-  return UnitIsPlayer(unit) 
+  return UnitIsPlayer(unit)
           and select(2, UnitClass(unit))
           or "NPC"
 end
