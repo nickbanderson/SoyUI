@@ -100,7 +100,7 @@ function SoyUI.UnitFrame:new(unit, x, y)
   uf.unit = unit
 
   local background = createBar(
-    uf.name .. "_background", 
+    uf.name .. "_background",
     {uf.width + 2 * uf.padding, uf.height + 3 * uf.padding},
     {0, 0, 0},
     UIParent
@@ -174,7 +174,7 @@ function SoyUI.UnitFrame:new(unit, x, y)
   )
   hp:SetPoint("TOPLEFT", uf.name .. "_background", "TOPLEFT",
               uf.padding, -1 * uf.padding)
-  hp.text = hp:CreateFontString(uf.name .. "_hpText", "MEDIUM", 
+  hp.text = hp:CreateFontString(uf.name .. "_hpText", "MEDIUM",
                                 "GameTooltipText")
   hp.text:SetFont(default_font_path, font_size, "OUTLINE")
   hp.text:SetPoint("CENTER", uf.name .. "_hp" , "LEFT",
@@ -188,10 +188,10 @@ function SoyUI.UnitFrame:new(unit, x, y)
   )
   power:SetPoint("BOTTOMLEFT", uf.name .. "_background",
                  "BOTTOMLEFT", uf.padding, uf.padding)
-  power.text = power:CreateFontString(uf.name .. "_powerText", "MEDIUM", 
+  power.text = power:CreateFontString(uf.name .. "_powerText", "MEDIUM",
                                       "GameTooltipText")
   power.text:SetFont(default_font_path, font_size, "OUTLINE")
-  power.text:SetPoint("CENTER", uf.name .. "_power" , "LEFT", 
+  power.text:SetPoint("CENTER", uf.name .. "_power" , "LEFT",
                       uf.width / 2 + uf.padding, 0)
 
   if UnitClass(unit) == "DRUID" then

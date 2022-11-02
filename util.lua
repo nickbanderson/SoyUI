@@ -90,7 +90,7 @@ SoyUI.util.print = function(msg)
     msg = "nil"
   end
 
-  DEFAULT_CHAT_FRAME:AddMessage("|cff00eeffSoyUI:|r " .. msg)	
+  DEFAULT_CHAT_FRAME:AddMessage("|cff00eeffSoyUI:|r " .. msg)
 end
 
 -- split string of words into table of words

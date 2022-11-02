@@ -18,7 +18,7 @@ end
 SoyUI.F = CreateFrame("Frame", "SoyUIController")
 SoyUI.F:RegisterEvent("ADDON_LOADED")
 SoyUI.F:SetScript("OnEvent", function(self, event, addonName)
-  if addonName == myAddonName then 
+  if addonName == myAddonName then
     SoyUI.F[event](self)
     SoyUI.F:UnregisterEvent(event)
   end
