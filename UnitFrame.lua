@@ -46,6 +46,13 @@ SoyUI.UnitFrame = {
 SoyUI.UnitFrame.__index = SoyUI.UnitFrame
 
 function SoyUI.UnitFrame:SetUpdateScripts()
+  -- insufficient for target/focus: UNIT_COMBAT, UNIT_HEALTH
+  self.frames.background:HookScript("OnUpdate",
+    function(f, _)
+      self:updateCombatIndicator()
+    end
+  )
+
   self.frames.hp:RegisterEvent("UNIT_HEALTH")
   self.frames.hp:RegisterEvent("UNIT_MAXHEALTH")
   self.frames.hp:SetScript("OnEvent",
@@ -252,11 +259,17 @@ function SoyUI.UnitFrame:updatePosition()
                                   SoyUI_DB.SoyFrames[self.unit].y)
 end
 
+function SoyUI.UnitFrame:updateCombatIndicator()
+  local color = UnitAffectingCombat(self.unit) == 1 and C.red or C.white
+  self.frames.background.name_text:SetTextColor(unpack(color))
+end
+
 function SoyUI.UnitFrame:show()
   self:updateMeta()
   self:updateHp()
   self:updatePower()
   self:updatePosition()
+  self:updateCombatIndicator()
   self.frames.background:Show()
 end
 
