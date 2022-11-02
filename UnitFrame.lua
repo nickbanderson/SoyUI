@@ -101,11 +101,17 @@ function SoyUI.UnitFrame:new(unit, x, y)
   )
   background.unit = unit
   background:SetPoint("CENTER", x, y)
-  background.text = background:CreateFontString(uf.name .. "_bgText", "MEDIUM",
+
+  background.name_text = background:CreateFontString(uf.name .. "_bgNameText", "MEDIUM",
                                                 "GameTooltipText")
-  background.text:SetPoint("BOTTOMLEFT", background, "TOPLEFT", 0, 0)
-  local default_font_path, font_size, _ = background.text:GetFont()
-  background.text:SetFont(default_font_path, font_size, "OUTLINE")
+  background.name_text:SetPoint("BOTTOMLEFT", background, "TOPLEFT", 0, 0)
+  local default_font_path, font_size, _ = background.name_text:GetFont()
+  background.name_text:SetFont(default_font_path, font_size, "OUTLINE")
+
+  background.level_text = background:CreateFontString(uf.name .. "_bgLevelText", "BACKGROUND",
+                                                "GameTooltipText")
+  background.level_text:SetPoint("BOTTOMRIGHT", background, "TOPRIGHT", 0, 0)
+  background.level_text:SetFont(default_font_path, font_size * 0.9, "OUTLINE")
 
   background:EnableMouse(true)
   background:SetClampedToScreen(true) -- keep frame on screen (while dragging)
@@ -221,7 +227,10 @@ function SoyUI.UnitFrame:updatePower()
 end
 
 function SoyUI.UnitFrame:updateMeta()
-  self.frames.background.text:SetText(GetUnitName(self.unit))
+  self.frames.background.name_text:SetText(GetUnitName(self.unit))
+  self.frames.background.level_text:SetText(UnitLevel(self.unit))
+  local reaction_color = SoyUI.util.UnitReactionColor(self.unit)
+  self.frames.background.level_text:SetTextColor(unpack(reaction_color or {1, 1, 1}))
 
   local power_type = UnitPowerType(self.unit) 
   self.frames.power.texture:SetTexture(unpack(C.POWER[power_type].main))

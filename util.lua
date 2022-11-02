@@ -9,6 +9,17 @@ SoyUI.util.POWER_TYPE = { -- incomplete, hard to find source
   ENERGY = 3,
 }
 
+SoyUI.util.REACTION = {
+  [1] = "hostile",
+  [2] = "hostile",
+  [3] = "hostile",
+  [4] = "neutral",
+  [5] = "friendly",
+  [6] = "friendly",
+  [7] = "friendly",
+  [8] = "friendly",
+}
+
 SoyUI.util.COLORS = {
   POWER = {
     [0] = { -- mana
@@ -51,6 +62,12 @@ SoyUI.util.COLORS = {
   white = {1, 1, 1},
 }
 
+SoyUI.util.COLORS.REACTION = {
+  ["hostile"] = SoyUI.util.COLORS.red,
+  ["neutral"] = SoyUI.util.COLORS.yellow,
+  ["friendly"] = {0, .9, 0}, -- SoyUI.util.COLORS.green,
+}
+
 -- recursively stringify a table
 SoyUI.util.stringify = function(o)
   if type(o) == 'table' then
@@ -78,8 +95,8 @@ end
 
 -- split string of words into table of words
 SoyUI.util.split = function(str)
-  words = {}
-  for word in str:gmatch("%w+") do 
+  local words = {}
+  for word in str:gmatch("%w+") do
     table.insert(words, word)
   end
   return words
@@ -107,4 +124,10 @@ end
 
 SoyUI.util.constrainValue = function(val, limits)
   return math.max(limits[1], math.min(val, limits[2]))
+end
+
+SoyUI.util.UnitReactionColor = function(unit)
+  -- local is_friend = UnitIsFriend("player", unit)
+  -- if is_friend == nil then is_friend = "nil" end
+  return SoyUI.util.COLORS.REACTION[SoyUI.util.REACTION[UnitReaction("player", unit)]]
 end

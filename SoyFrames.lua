@@ -73,10 +73,10 @@ function m.init()
         setCombatIndicator(unit)
       end,
       PLAYER_REGEN_DISABLED = function()
-        m.uf.player.frames.background.text:SetTextColor(unpack(C.red))
+        m.uf.player.frames.background.name_text:SetTextColor(unpack(C.red))
       end,
       PLAYER_REGEN_ENABLED = function()
-        m.uf.player.frames.background.text:SetTextColor(unpack(C.white))
+        m.uf.player.frames.background.name_text:SetTextColor(unpack(C.white))
       end,
     })[event] or print("UNMATCHED EVENT"))(...)
   end)
