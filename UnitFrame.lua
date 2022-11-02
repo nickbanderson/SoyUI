@@ -57,7 +57,6 @@ function SoyUI.UnitFrame:SetUpdateScripts()
 
   -- UNIT_ENERGY is insufficient for energy; updates are too slow
   if UnitClass(self.unit) == "ROGUE" or UnitClass(self.unit) == "DRUID" then
-    print("speedy update on " .. self.unit)
     self.frames.power:HookScript("OnUpdate", function(f, _)
       self:updatePower()
     end)
