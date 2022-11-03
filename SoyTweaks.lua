@@ -99,7 +99,7 @@ local function enablePvpCountdowns()
         ones:Hide()
         tens:Hide()
       end
-      return 
+      return
     end
 
     local old_timer = m.cd.timer

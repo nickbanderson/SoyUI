@@ -39,7 +39,7 @@ function m.init()
   ef:RegisterEvent("PLAYER_REGEN_ENABLED")
   ef:SetScript("OnEvent", function(s, event, ...)
     (({
-      PLAYER_LOGIN = function() 
+      PLAYER_LOGIN = function()
         m.uf.player:show()
       end,
       UNIT_PET = function()
@@ -50,18 +50,18 @@ function m.init()
           m.uf.pet:hide()
         end
       end,
-      PLAYER_TARGET_CHANGED = function() 
-        if UnitExists("target") then 
-          m.uf.target:show() 
+      PLAYER_TARGET_CHANGED = function()
+        if UnitExists("target") then
+          m.uf.target:show()
         else
-          m.uf.target:hide() 
+          m.uf.target:hide()
         end
       end,
-      PLAYER_FOCUS_CHANGED = function() 
-        if UnitExists("focus") then 
-          m.uf.focus:show() 
+      PLAYER_FOCUS_CHANGED = function()
+        if UnitExists("focus") then
+          m.uf.focus:show()
         else
-          m.uf.focus:hide() 
+          m.uf.focus:hide()
         end
       end,
       UNIT_COMBAT = function(...)

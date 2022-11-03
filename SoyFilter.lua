@@ -58,7 +58,7 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		else
 			SoyUI_DB.SoyFilter.filterWords = {msg}
 		  print("Added " .. msg)
-		end 
+		end
 
 	elseif msg:find("remove", 0, true) then
 		-- get words to remove
@@ -74,14 +74,14 @@ SlashCmdList["SOYFILTER"] = function(msg)
 		  print("Removed " .. msg)
 		else
 		  print("No custom user words found")
-		end 	
+		end
 
   elseif msg:find("threshold", 0, true) then
 		-- get threshold
 		msg = string.gsub(msg, "threshold", "") -- remove the t
 		msg = string.gsub(msg, "%s$", "") -- remove any spaces from the end
 		msg = string.gsub(msg, "^%s", "") -- remove any spaces from the end
-		if msg == "" then 
+		if msg == "" then
 			print("Current threshold is " .. SoyUI_DB.SoyFilter.matchThreshold)
 	  elseif tonumber(msg) > 0 and tonumber(msg) < 100 then
 			SoyUI_DB.SoyFilter.matchThreshold = tonumber(msg)

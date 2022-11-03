@@ -32,7 +32,7 @@ local function addModuleTabs()
 
       if (self.widgets) then
         for _, widget in pairs(self.widgets) do
-          widget:Show() 
+          widget:Show()
         end
       end
     end)
@@ -42,9 +42,9 @@ local function addModuleTabs()
   createTab("SoyConfig", tab_i, {m.configPanel, "TOPLEFT"})
   local anchor = tabs["SoyConfig"]
   for mod_name, _ in pairs(SoyUI.modules) do
-    if mod_name ~= "SoyConfig" then 
+    if mod_name ~= "SoyConfig" then
       tab_i = tab_i + 1
-      createTab(mod_name, tab_i, {anchor, "BOTTOMRIGHT"}) 
+      createTab(mod_name, tab_i, {anchor, "BOTTOMRIGHT"})
       anchor = tabs[mod_name]
     end
   end
@@ -56,7 +56,7 @@ local function makeSlider(label, initial_val, pos, range, size, setter)
   size = size or {100, 15}
   local frame_name = "SoyConfigPanel" .. string.gsub(label, "%s+", "") .. "Slider"
 
-  local slider = CreateFrame("Slider", frame_name, m.configPanel, 
+  local slider = CreateFrame("Slider", frame_name, m.configPanel,
                               "OptionsSliderTemplate")
   slider:SetWidth(size[1])
   slider:SetHeight(size[2])
@@ -68,7 +68,7 @@ local function makeSlider(label, initial_val, pos, range, size, setter)
   getglobal(frame_name.."High"):SetText(range[2])
   getglobal(frame_name.."Text"):SetText(label)
 
-  local box = CreateFrame("EditBox", frame_name.."EditBox", slider, 
+  local box = CreateFrame("EditBox", frame_name.."EditBox", slider,
                           "InputBoxTemplate")
   box:SetWidth(30)
   box:SetHeight(15)
@@ -84,9 +84,9 @@ local function makeSlider(label, initial_val, pos, range, size, setter)
     box:SetText(val)
     box:ClearFocus()
   end
-  slider:SetScript("OnValueChanged", 
+  slider:SetScript("OnValueChanged",
                     function(self, val) hookedSetter(val) end)
-  box:SetScript("OnEnterPressed", 
+  box:SetScript("OnEnterPressed",
                 function(self) hookedSetter(self:GetText()) end)
 
   return slider

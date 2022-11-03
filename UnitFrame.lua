@@ -11,7 +11,7 @@ local function createBar(name, size, color, parent)
   f:SetFrameStrata("LOW")
   f:SetWidth(size[1])
   f:SetHeight(size[2])
-  
+
   local t = f:CreateTexture(nil, "BACKGROUND")
   t:SetTexture(unpack(color))
   t:SetAllPoints(f)
@@ -21,7 +21,7 @@ local function createBar(name, size, color, parent)
   function f:SetZeroableWidth(width)
     self:SetWidth(width > 0 and width or .001)
   end
- 
+
   return f
 end
 
@@ -140,13 +140,13 @@ function SoyUI.UnitFrame:new(unit, x, y)
       -- print('target kek')
       -- TargetUnit(self.unit) -- cant do this so easily bc its protected
     elseif type == "RightButton" then
-      local background = "SoyFrames_"..self.unit.."_background"
+      local bg_name = "SoyFrames_"..self.unit.."_background"
       if self.unit == 'player' then
-        ToggleDropDownMenu(1, nil, PlayerFrameDropDown, background, 0, 0)
+        ToggleDropDownMenu(1, nil, PlayerFrameDropDown, bg_name, 0, 0)
       elseif self.unit == 'target' then
-        ToggleDropDownMenu(1, nil, TargetFrameDropDown, background, 0, 0)
+        ToggleDropDownMenu(1, nil, TargetFrameDropDown, bg_name, 0, 0)
       elseif self.unit == 'focus' then
-        ToggleDropDownMenu(1, nil, FocusFrameDropDown, background, 0, 0)
+        ToggleDropDownMenu(1, nil, FocusFrameDropDown, bg_name, 0, 0)
       end
     elseif type == "MiddleButton" then
         print(type)
@@ -226,6 +226,10 @@ function SoyUI.UnitFrame:updatePower()
   self.frames.power:SetZeroableWidth(proportion * self.width)
   self.frames.power.text:SetText(SoyUI.util.fmtNum(UnitPower(self.unit)))
 
+  if self.unit == "player" and UnitPowerMax(self.unit) == 120 and proportion ~= 1 then
+    print("power updated: " .. proportion)
+  end
+
   if self.frames.power.druid_text ~= nil then
     self.frames.power.druid_text:SetText(
       SoyUI.util.fmtNum(UnitPower(self.unit, PT.MANA)))
@@ -240,7 +244,7 @@ function SoyUI.UnitFrame:updateMeta()
   local reaction_color = SoyUI.util.UnitReactionColor(self.unit)
   self.frames.background.level_text:SetTextColor(unpack(reaction_color or {1, 1, 1}))
 
-  local power_type = UnitPowerType(self.unit) 
+  local power_type = UnitPowerType(self.unit)
   self.frames.power.texture:SetTexture(unpack(C.POWER[power_type].main))
   self.frames.power.text:SetTextColor(unpack(C.POWER[power_type].lighter))
 
@@ -257,7 +261,7 @@ end
 
 function SoyUI.UnitFrame:updatePosition()
   self.frames.background:SetPoint("BOTTOMLEFT", "UIParent", "BOTTOMLEFT",
-                                  SoyUI_DB.SoyFrames[self.unit].x, 
+                                  SoyUI_DB.SoyFrames[self.unit].x,
                                   SoyUI_DB.SoyFrames[self.unit].y)
 end
 

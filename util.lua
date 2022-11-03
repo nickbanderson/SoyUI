@@ -23,23 +23,23 @@ SoyUI.util.REACTION = {
 SoyUI.util.COLORS = {
   POWER = {
     [0] = { -- mana
-      main = {0, 0, 1},    
+      main = {0, 0, 1},
       lighter = {.678, .847, .902},
     },
     [1] = { -- rage
-      main = {1, 0, 0},    
+      main = {1, 0, 0},
       lighter = {1, .6, .597},
     },
     [2] = { -- focus
-      main = {1, .502, .251},    
+      main = {1, .502, .251},
       lighter = {.996, .847, .694},
     },
     [3] = { -- energy
-      main = {1, 1, 0},    
+      main = {1, 1, 0},
       lighter = {1, 1, .878},
     },
     [6] = { -- runic power
-      main = {0, .820, 1},    
+      main = {0, .820, 1},
       lighter = {.635, .777, .828},
     },
   },
@@ -107,7 +107,7 @@ SoyUI.util.fmtNum = function(num)
   if num < 1000 then
     return num
   end
-    
+
   local n = #tostring(num)
   local suffix = n > 6 and "m" or "k"
   local split = n > 6 and n - 6 or n - 3
