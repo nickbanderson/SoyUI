@@ -19,7 +19,7 @@ local m = SoyUI.modules.SoyTweaks
 local function registerSlashReload()
   SLASH_SOYUI_RELOAD1 = "/rl"
   SlashCmdList["SOYUI_RELOAD"] = function()
-    DEFAULT_CHAT_FRAME.editBox:SetText("/reload") 
+    DEFAULT_CHAT_FRAME.editBox:SetText("/reload")
     ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
   end
 end
@@ -29,15 +29,15 @@ end
 
 local function enableArenaNumberOnNameplate()
   hooksecurefunc("CompactUnitFrame_UpdateName", function(nameplate)
-    if IsActiveBattlefieldArena() and nameplate.unit:find("nameplate", 0, true) then 
-      for i=1,5 do 
-        if UnitIsUnit( nameplate.unit ,"arena"..i) then 
+    if IsActiveBattlefieldArena() and nameplate.unit:find("nameplate", 0, true) then
+      for i=1,5 do
+        if UnitIsUnit( nameplate.unit ,"arena"..i) then
           nameplate.name:SetText(i)
           nameplate.name:SetTextColor(1,1,0)
-          break 
-        end 
-      end 
-    end 
+          break
+        end
+      end
+    end
   end)
 end
 
@@ -93,7 +93,7 @@ local function enablePvpCountdowns()
 
   m.cd.ef:SetScript("OnUpdate", function(self, elapse)
     -- timer off or just expiring
-    if m.cd.timer <= 0 then 
+    if m.cd.timer <= 0 then
       if not hidden then
         m.cd.hidden = true
         ones:Hide()
