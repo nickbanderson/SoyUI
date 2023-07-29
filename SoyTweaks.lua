@@ -131,6 +131,7 @@ function m.init()
   registerSlashReload()
   setCVars()
   enablePvpCountdowns()
+  UIErrorsFrame:Hide()
   if SoyUI_DB.SoyTweaks.showArenaNumberOnNameplate then
     -- enableArenaNumberOnNameplate()
   end
