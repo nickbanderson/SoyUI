@@ -16,11 +16,17 @@ SoyUI.modules.SoyTweaks = {
 local print = SoyUI.util.print
 local m = SoyUI.modules.SoyTweaks
 
-local function registerSlashReload()
+local function registerSlashCommands()
   SLASH_SOYUI_RELOAD1 = "/rl"
   SlashCmdList["SOYUI_RELOAD"] = function()
     DEFAULT_CHAT_FRAME.editBox:SetText("/reload")
     ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
+  end
+
+  SLASH_SOYUI_TOGGLE_SCRIPT_ERRORS1 = "/error"
+  SlashCmdList["SOYUI_TOGGLE_SCRIPT_ERRORS"] = function()
+    SetCVar("scriptErrors", 1 - tonumber(GetCVar("scriptErrors")))
+    print("scriptErrors = ".. GetCVar("scriptErrors"))
   end
 end
 
@@ -128,7 +134,7 @@ local function enablePvpCountdowns()
 end
 
 function m.init()
-  registerSlashReload()
+  registerSlashCommands()
   setCVars()
   enablePvpCountdowns()
   UIErrorsFrame:Hide()
